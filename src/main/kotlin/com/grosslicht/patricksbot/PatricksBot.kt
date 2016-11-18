@@ -1,13 +1,16 @@
 package com.grosslicht.patricksbot
 
-import com.grosslicht.patricksbot.command.*
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
+import com.grosslicht.patricksbot.command.JDACommandHandler
+import com.grosslicht.patricksbot.command.impl.*
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 
 /**
  * Created by patrickgrosslicht on 13/10/16.
  */
-
+//TODO: Logging
 fun main(args: Array<String>) {
     val builder = JDABuilder(AccountType.BOT)
     val token = System.getenv("DISCORD_API_TOKEN")
@@ -19,4 +22,11 @@ fun main(args: Array<String>) {
     cmdHandler.registerCommand(VersionCommand())
     cmdHandler.registerCommand(TestCommand())
     cmdHandler.registerCommand(HelpCommand(cmdHandler))
+    if (false) {
+        val firebaseJson = object : Any() {}.javaClass.classLoader.getResourceAsStream("firebase.json")
+        val auth = mapOf<String, Any>(Pair("uid", "patricksbot"))
+        val options = FirebaseOptions.Builder().setServiceAccount(firebaseJson).setDatabaseUrl("https://mtg-emblems.firebaseio.com").setDatabaseAuthVariableOverride(auth).build()
+        FirebaseApp.initializeApp(options)
+        cmdHandler.registerCommand(EmblemCommand())
+    }
 }

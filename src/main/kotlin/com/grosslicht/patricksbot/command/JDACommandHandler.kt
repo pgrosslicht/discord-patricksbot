@@ -110,8 +110,6 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
         var stringCounter = 0
         for (i in parameterTypes.indices) { // check all parameters
             val type = parameterTypes[i]
-            logger.debug { parameterTypes }
-            logger.debug { type }
             if (type == String::class.java) {
                 if (stringCounter++ == 0) {
                     parameters[i] = splitMessage[0] // the first split is the command

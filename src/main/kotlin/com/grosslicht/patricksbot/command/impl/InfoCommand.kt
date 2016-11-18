@@ -1,5 +1,7 @@
-package com.grosslicht.patricksbot.command
+package com.grosslicht.patricksbot.command.impl
 
+import com.grosslicht.patricksbot.command.Command
+import com.grosslicht.patricksbot.command.CommandExecutor
 import java.lang.management.ManagementFactory
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -7,9 +9,14 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by patrickgrosslicht on 15/11/16.
  */
-class UptimeCommand : CommandExecutor {
+class InfoCommand : CommandExecutor {
+    @Command(aliases = arrayOf(".version", ".build"), description = "Shows what build the bot is running")
+    fun onVersionCommand(): String {
+        return "I am PatricksBot v${getVersion()}"
+    }
+
     @Command(aliases = arrayOf(".uptime", ".up"), description = "Shows how long the bot has been online for.")
-    fun onCommand(): String {
+    fun onUptimeCommand(): String {
         val millis = ManagementFactory.getRuntimeMXBean().uptime
         return "I have been up for ${String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis),
                 TimeUnit.MILLISECONDS.toMinutes(millis) % TimeUnit.HOURS.toMinutes(1),
@@ -20,6 +27,6 @@ class UptimeCommand : CommandExecutor {
         val prop = Properties()
         val input = javaClass.classLoader.getResourceAsStream("build.properties")
         prop.load(input)
-        return "I am PatricksBot v${prop.getProperty("version")}."
+        return prop.getProperty("version")
     }
 }

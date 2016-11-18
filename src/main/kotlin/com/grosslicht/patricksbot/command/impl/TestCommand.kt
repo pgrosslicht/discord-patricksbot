@@ -1,4 +1,7 @@
-package com.grosslicht.patricksbot.command
+package com.grosslicht.patricksbot.command.impl
+
+import com.grosslicht.patricksbot.command.Command
+import com.grosslicht.patricksbot.command.CommandExecutor
 
 /**
  * Created by patrickgrosslicht on 12/11/16.

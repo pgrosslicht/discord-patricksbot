@@ -1,4 +1,8 @@
-package com.grosslicht.patricksbot.command
+package com.grosslicht.patricksbot.command.impl
+
+import com.grosslicht.patricksbot.command.Command
+import com.grosslicht.patricksbot.command.CommandExecutor
+import com.grosslicht.patricksbot.command.CommandHandler
 
 /**
  * Created by patrickgrosslicht on 12/11/16.
@@ -25,7 +29,7 @@ class HelpCommand(private val commandHandler: CommandHandler) : CommandExecutor 
             builder.append(usage)
             val description = simpleCommand.commandAnnotation.description
             if (description != "none") {
-                builder.append(" | ").append(description)
+                builder.append("\t|\t").append(description)
             }
         }
         builder.append("\n```") // end of xml code block

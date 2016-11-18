@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
     jda.addEventListener(OfflineWarner())
     val cmdHandler = JDACommandHandler(jda)
     cmdHandler.registerCommand(InfoCommand())
-    cmdHandler.registerCommand(TestCommand())
+    cmdHandler.registerCommand(PingCommand())
     cmdHandler.registerCommand(HelpCommand(cmdHandler))
     if (false) {
         val firebaseJson = object : Any() {}.javaClass.classLoader.getResourceAsStream("firebase.json")

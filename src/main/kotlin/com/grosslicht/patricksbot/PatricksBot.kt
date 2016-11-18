@@ -18,8 +18,7 @@ fun main(args: Array<String>) {
     val jda = builder.buildBlocking()
     jda.addEventListener(OfflineWarner())
     val cmdHandler = JDACommandHandler(jda)
-    cmdHandler.registerCommand(UptimeCommand())
-    cmdHandler.registerCommand(VersionCommand())
+    cmdHandler.registerCommand(InfoCommand())
     cmdHandler.registerCommand(TestCommand())
     cmdHandler.registerCommand(HelpCommand(cmdHandler))
     if (false) {

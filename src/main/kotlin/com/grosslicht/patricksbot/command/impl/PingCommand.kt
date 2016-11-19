@@ -16,7 +16,7 @@ class PingCommand : CommandExecutor {
     @Command(aliases = arrayOf(".ping"), description = "Pong!")
     fun onCommand(message: Message, channel: TextChannel) {
         channel.sendMessage("Pinging...").queue({ m ->
-            m.editMessage("Pong: " + message.creationTime.until(m.creationTime, ChronoUnit.MILLIS) + "μs").queue()
+            m.editMessage("Pong: " + message.creationTime.until(m.creationTime, ChronoUnit.MILLIS) + "ms").queue()
         })
     }
 }

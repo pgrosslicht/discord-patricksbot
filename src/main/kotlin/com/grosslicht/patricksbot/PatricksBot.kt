@@ -16,6 +16,7 @@ fun main(args: Array<String>) {
     val token = System.getenv("DISCORD_API_TOKEN")
     builder.setToken(token)
     val jda = builder.buildBlocking()
+    jda.addEventListener(Logging())
     jda.addEventListener(OfflineWarner())
     val cmdHandler = JDACommandHandler(jda)
     cmdHandler.registerCommand(InfoCommand())

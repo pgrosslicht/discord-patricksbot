@@ -2,30 +2,24 @@ image: pdgwien/gradle-docker
 
 variables:
   CONTAINER_IMAGE: gitlab-registry.grosslicht.com/discord/patricksbot
-  
+
 before_script:
   - export GRADLE_USER_HOME=/cache/.gradle
+  - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab-registry.grosslicht.com
 
 stages:
 - build
-- release
 
 build:
   stage: build
   script:
-    - gradle build assembleDist
-  allow_failure: false
-  artifacts:
-    paths:
-      - "build/distributions/*.tar"
-
-release-image:
-  stage: release
-  script:
-    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab-registry.grosslicht.com
-    - gradle dockerBuildImage tagAsLatest
+    - gradle build assembleDist dockerBuildImage tagAsLatest
     - docker push $CONTAINER_IMAGE
+  allow_failure: false
   only:
     - master
   tags:
     - docker
+  artifacts:
+    paths:
+      - "build/distributions/*.tar"

@@ -114,7 +114,7 @@ class Version {
     int major, minor, revision
 
     String getBuild() {
-        System.getenv('CI_BUILD_ID') ?: 'dev'
+        System.getenv('CI_BUILD_REF') ?: 'dev'
     }
 
     String toString() {

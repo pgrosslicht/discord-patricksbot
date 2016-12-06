@@ -110,8 +110,8 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
         var stringCounter = 0
         for (i in parameterTypes.indices) { // check all parameters
             val type = parameterTypes[i]
-            if (type == String::class.java) {
-                if (stringCounter++ == 0) {
+            when (type) {
+                String::class.java -> if (stringCounter++ == 0) {
                     parameters[i] = splitMessage[0] // the first split is the command
                 } else {
                     if (args.size + 2 > stringCounter) {
@@ -119,34 +119,20 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
                         parameters[i] = args[stringCounter - 2]
                     }
                 }
-            } else if (type == Array<String>::class.java) {
-                parameters[i] = args
-            } else if (type == MessageReceivedEvent::class.java) {
-                parameters[i] = event
-            } else if (type == JDA::class.java) {
-                parameters[i] = event.jda
-            } else if (type == MessageChannel::class.java) {
-                parameters[i] = event.channel
-            } else if (type == Message::class.java) {
-                parameters[i] = event.message
-            } else if (type == User::class.java) {
-                parameters[i] = event.author
-            } else if (type == TextChannel::class.java) {
-                parameters[i] = event.textChannel
-            } else if (type == PrivateChannel::class.java) {
-                parameters[i] = event.privateChannel
-            } else if (type == MessageChannel::class.java) {
-                parameters[i] = event.channel
-            } else if (type == Channel::class.java) {
-                parameters[i] = event.textChannel
-            } else if (type == Guild::class.java) {
-                parameters[i] = event.guild
-            } else if (type == Int::class.java || type == Integer.TYPE) {
-                parameters[i] = event.responseNumber
-            } else if (type == Array<Any>::class.java) {
-                parameters[i] = getObjectsFromString(event.jda, args)
-            } else {
-                parameters[i] = null
+                Array<String>::class.java -> parameters[i] = args
+                MessageReceivedEvent::class.java -> parameters[i] = event
+                JDA::class.java -> parameters[i] = event.jda
+                MessageChannel::class.java -> parameters[i] = event.channel
+                Message::class.java -> parameters[i] = event.message
+                User::class.java -> parameters[i] = event.author
+                TextChannel::class.java -> parameters[i] = event.textChannel
+                PrivateChannel::class.java -> parameters[i] = event.privateChannel
+                MessageChannel::class.java -> parameters[i] = event.channel
+                Channel::class.java -> parameters[i] = event.textChannel
+                Guild::class.java -> parameters[i] = event.guild
+                Int::class.java, Integer.TYPE -> parameters[i] = event.responseNumber
+                Array<Any>::class.java -> parameters[i] = getObjectsFromString(event.jda, args)
+                else -> parameters[i] = null
             }
         }
         return parameters

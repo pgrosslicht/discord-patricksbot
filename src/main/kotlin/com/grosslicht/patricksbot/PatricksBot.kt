@@ -13,7 +13,8 @@ import net.dv8tion.jda.core.JDABuilder
 //TODO: Logging
 fun main(args: Array<String>) {
     val builder = JDABuilder(AccountType.BOT)
-    val token = System.getenv("DISCORD_API_TOKEN")
+    //val token = System.getenv("DISCORD_API_TOKEN")
+    val token = "MjM2NTYxODE1MjcyODE2NjQx.CuwdvQ.R3WXyJeksiRGXR89JtBLZYaNvnY"
     builder.setToken(token)
     val jda = builder.buildBlocking()
     jda.addEventListener(Logging())
@@ -21,6 +22,7 @@ fun main(args: Array<String>) {
     val cmdHandler = JDACommandHandler(jda)
     cmdHandler.registerCommand(InfoCommand())
     cmdHandler.registerCommand(PingCommand())
+    cmdHandler.registerCommand(CodeCommand())
     cmdHandler.registerCommand(HelpCommand(cmdHandler))
     if (false) {
         val firebaseJson = object : Any() {}.javaClass.classLoader.getResourceAsStream("firebase.json")

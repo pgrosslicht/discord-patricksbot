@@ -2,6 +2,9 @@ image: pdgwien/gradle-docker
 
 variables:
   CONTAINER_IMAGE: gitlab-registry.grosslicht.com/discord/patricksbot
+  
+before_script:
+  - export GRADLE_USER_HOME=/cache/.gradle
 
 stages:
 - build
@@ -15,8 +18,6 @@ build:
   artifacts:
     paths:
       - "build/distributions/*.tar"
-  variables:
-    CI_DEBUG_TRACE: "true"
 
 release-image:
   stage: release

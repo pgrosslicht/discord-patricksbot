@@ -99,13 +99,13 @@ task dockerDistTar(type: com.bmuschko.gradle.docker.tasks.image.Dockerfile, depe
 task dockerBuildImage(type: com.bmuschko.gradle.docker.tasks.image.DockerBuildImage, dependsOn: 'dockerDistTar') {
     description = 'Builds the Docker image for the Java application.'
     conventionMapping.inputDir = { dockerDistTar.destFile.parentFile }
-    conventionMapping.tag = { "registry.grosslicht.com/pdg/patricksbot:${project.version}".toString() }
+    conventionMapping.tag = { "gitlab-registry.grosslicht.com/discord/patricksbot:${project.version}".toString() }
 }
 
 
 task tagAsLatest(type: com.bmuschko.gradle.docker.tasks.image.DockerTagImage, dependsOn: 'dockerBuildImage') {
     targetImageId { dockerBuildImage.getImageId() }
-    repository = "registry.grosslicht.com/pdg/patricksbot"
+    repository = "gitlab-registry.grosslicht.com/discord/patricksbot"
     tag = 'latest'
 }
 
@@ -114,7 +114,7 @@ class Version {
     int major, minor, revision
 
     String getBuild() {
-        System.getenv('BUILD_NUMBER') ?: 'dev'
+        System.getenv('CI_BUILD_ID') ?: 'dev'
     }
 
     String toString() {

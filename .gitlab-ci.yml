@@ -18,6 +18,8 @@ build:
   artifacts:
     paths:
       - "build/distributions/*.tar"
+  variables:
+    CI_DEBUG_TRACE: "true"
 
 release-image:
   stage: release

@@ -13,15 +13,18 @@ stages:
 build:
   stage: build
   script:
-    - gradle build assembleDist dockerBuildImage tagAsLatest
+    - gradle build assembleDist
   allow_failure: false
   artifacts:
     paths:
       - "build/distributions/*.tar"
-  
+
 release-image:
   stage: release
   script:
+    - gradle dockerBuildImage tagAsLatest
     - docker push $CONTAINER_IMAGE
   only:
     - master
+  tags:
+    - docker

@@ -12,7 +12,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter
 class Logging : ListenerAdapter() {
     companion object : KLogging()
     override fun onMessageReceived(event: MessageReceivedEvent) {
-        logger.debug { "Received message '${event.message.content}' from ${event.author.name}" }
+        logger.debug { "Received message #${event.message.id} '${event.message.content}' from ${event.author.name}" }
     }
 
     override fun onMessageDelete(event: MessageDeleteEvent) {

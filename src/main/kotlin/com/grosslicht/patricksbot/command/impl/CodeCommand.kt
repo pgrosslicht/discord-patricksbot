@@ -63,7 +63,7 @@ class CodeCommand : CommandExecutor {
         val token = Token()
         var string = StringBuilder()
         var output = MessageBuilder()
-        "http://httpbin.org/post".httpPost(listOf(Pair("auth", "${token.timeCreated}:${token.mac}"), Pair("language", language), Pair("code", code)))
+        "https://api.repl.it/eval".httpPost(listOf(Pair("auth", "${token.timeCreated}:${token.mac}"), Pair("language", language), Pair("code", code)))
                 .header(mapOf("Content-Type" to "application/x-www-form-urlencoded", "Accept" to "application/json"))
                 .responseString { request, response, result ->
                 result.fold({ d ->
@@ -71,7 +71,7 @@ class CodeCommand : CommandExecutor {
                     val results = Gson().fromJson<List<CodeResult>>(d)
                     logger.debug { results }
                     for ((command, data, error) in results) {
-                        if (error !== "") {
+                        if (error != "") {
                             output.appendCodeBlock(error, language)
                         }
                         if (command == "result") {
@@ -81,7 +81,7 @@ class CodeCommand : CommandExecutor {
                         }
                     }
                 }, { err ->
-                    output.appendString("Error while executing code")
+                    output.append("Error while executing code")
                     logger.debug { err }
                 })
             }

@@ -70,11 +70,6 @@ processResources {
 
 docker {
     url = 'unix:///var/run/docker.sock'
-    registryCredentials {
-        url = 'https://gitlab-registry.grosslicht.com'
-        username = 'gitlab-ci-token'
-        password = System.getenv('CI_BUILD_TOKEN')
-    }
 }
 
 processResources {
@@ -115,6 +110,11 @@ task tagAsLatest(type: com.bmuschko.gradle.docker.tasks.image.DockerTagImage, de
 
 task dockerPushImage(type: com.bmuschko.gradle.docker.tasks.image.DockerPushImage, dependsOn: 'tagAsLatest') {
     imageName = "gitlab-registry.grosslicht.com/discord/patricksbot"
+    registryCredentials {
+        url = 'gitlab-registry.grosslicht.com'
+        username = 'gitlab-ci-token'
+        password = System.getenv('CI_BUILD_TOKEN')
+    }
 }
 
 class Version {

@@ -70,6 +70,11 @@ processResources {
 
 docker {
     url = 'unix:///var/run/docker.sock'
+    registryCredentials {
+        url = 'https://gitlab-registry.grosslicht.com'
+        username = 'gitlab-ci-token'
+        password = System.getenv('CI_BUILD_TOKEN')
+    }
 }
 
 processResources {

@@ -57,7 +57,7 @@ class OfflineWarner : ListenerAdapter() {
         logger.debug { "${affectedBot.name} has come back online at ${LocalDateTime.now()}" }
         val date = map.getOrElse(affectedBot.id, { logger.debug { "Could not find time when bot went offline" }; return })
         val duration = Duration.between(date, LocalDateTime.now())
-        val message = MessageBuilder().appendFormat("Well finally… That took %s for %U% to come back online.", duration.toString(), affectedBot)
+        val message = MessageBuilder().appendFormat("Well finally… That took %s for %s to come back online.", duration.toString(), affectedBot.name)
         event.guild.getTextChannelById("138404620128092160").sendMessage(message.build()).queue()
     }
 }

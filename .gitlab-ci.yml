@@ -13,8 +13,7 @@ stages:
 build:
   stage: build
   script:
-    - gradle build assembleDist dockerBuildImage tagAsLatest
-    - docker push $CONTAINER_IMAGE
+    - gradle build assembleDist dockerBuildImage tagAsLatest dockerPushImage
   allow_failure: false
   only:
     - master

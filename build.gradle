@@ -108,6 +108,9 @@ task tagAsLatest(type: com.bmuschko.gradle.docker.tasks.image.DockerTagImage, de
     tag = 'latest'
 }
 
+task dockerPushImage(type: com.bmuschko.gradle.docker.tasks.image.DockerPushImage, dependsOn: 'tagAsLatest') {
+    imageName = "gitlab-registry.grosslicht.com/discord/patricksbot"
+}
 
 class Version {
     int major, minor, revision

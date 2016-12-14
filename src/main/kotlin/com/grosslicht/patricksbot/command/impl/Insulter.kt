@@ -77,13 +77,13 @@ class Insulter : CommandExecutor {
 
     val generator = ShakespeareanInsultGenerator()
 
-    @Command(aliases = arrayOf(".insult"), showInHelpPage = true, usage = ".insult [@user]")
+    @Command(aliases = arrayOf(".insult"), showInHelpPage = true, usage = ".insult [@user]", description = "Insults one or more users Shakespereanly.")
     fun insult(message: Message) : String {
         if (message.mentionedUsers.isEmpty()) {
             return "Thou shalt mention an ignaro, thou ${generator.generateInsult()}!"
         }
-        return message.mentionedUsers.map { u -> u.name }.joinToString(", ")
-                .plus(" ${if (message.mentionedUsers.size > 1) "ye" else "thou"} ${generator.generateInsult()}${if (message.mentionedUsers.size > 1) "s!" else "!"}")
+        return message.mentionedUsers.map { u -> u.name }.map { n -> "**$n**" }.joinToString(", ")
+                .plus(", ${if (message.mentionedUsers.size > 1) "ye" else "thou"} ${generator.generateInsult()}${if (message.mentionedUsers.size > 1) "s!" else "!"}")
     }
 }
 

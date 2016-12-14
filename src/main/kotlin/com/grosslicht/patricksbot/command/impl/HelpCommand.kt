@@ -3,6 +3,11 @@ package com.grosslicht.patricksbot.command.impl
 import com.grosslicht.patricksbot.command.Command
 import com.grosslicht.patricksbot.command.CommandExecutor
 import com.grosslicht.patricksbot.command.CommandHandler
+import de.vandermeer.asciitable.v2.V2_AsciiTable
+import de.vandermeer.asciitable.v2.render.V2_AsciiTableRenderer
+import de.vandermeer.asciitable.v2.render.WidthAbsoluteEven
+import de.vandermeer.asciitable.v2.themes.V2_E_TableThemes
+import net.dv8tion.jda.core.MessageBuilder
 
 /**
  * Created by patrickgrosslicht on 12/11/16.
@@ -11,29 +16,22 @@ class HelpCommand(private val commandHandler: CommandHandler) : CommandExecutor 
 
     @Command(aliases = arrayOf(".help", ".commands"), description = "Shows this page")
     fun onHelpCommand(): String {
-        val builder = StringBuilder()
-        builder.append("```xml") // a xml code block looks fancy
-        for (simpleCommand in commandHandler.getCommands()) {
-            if (!simpleCommand.commandAnnotation.showInHelpPage) {
-                continue // skip command
-            }
-            builder.append("\n")
-            if (!simpleCommand.commandAnnotation.requiresMention) {
-                // the default prefix only works if the command does not require a mention
-                builder.append(commandHandler.defaultPrefix)
-            }
-            var usage = simpleCommand.commandAnnotation.usage
-            if (usage.isEmpty()) { // no usage provided, using the first alias
-                usage = simpleCommand.commandAnnotation.aliases[0]
-            }
-            builder.append(usage)
-            val description = simpleCommand.commandAnnotation.description
-            if (description != "none") {
-                builder.append("\t|\t").append(description)
-            }
-        }
-        builder.append("\n```") // end of xml code block
-        return builder.toString()
+        val builder = MessageBuilder()
+        val table = V2_AsciiTable()
+        table.addRule()
+        table.addRow("Command", "Usage", "Description")
+        table.addRule()
+        commandHandler.getCommands()
+                .filter { it.commandAnnotation.showInHelpPage }
+                .forEach {
+                    table.addRow(it.commandAnnotation.aliases[0], if (it.commandAnnotation.usage.isEmpty()) it.commandAnnotation.aliases[0] else it.commandAnnotation.usage, it.commandAnnotation.description)
+                    table.addRule()
+                }
+        val renderer = V2_AsciiTableRenderer()
+        renderer.setTheme(V2_E_TableThemes.UTF_LIGHT.get())
+        renderer.setWidth(WidthAbsoluteEven(85))
+        builder.appendCodeBlock(renderer.render(table).toStrBuilder(), "xml")
+        return builder.build().content
     }
 
 }

@@ -120,7 +120,7 @@ class Version {
     }
 
     String toString() {
-        "${major}.${minor}.${revision}+${build}"
+        "${major}.${minor}.${revision}-${build}"
     }
 }
 

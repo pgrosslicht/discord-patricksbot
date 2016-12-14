@@ -77,7 +77,7 @@ class Insulter : CommandExecutor {
 
     val generator = ShakespeareanInsultGenerator()
 
-    @Command(aliases = arrayOf(".insult"), showInHelpPage = true, usage = ".insult [@user]", description = "Insults one or more users Shakespereanly.")
+    @Command(aliases = arrayOf(".insult"), showInHelpPage = true, usage = ".insult [@user]", description = "Insults one or more users Shakespeareanly.")
     fun insult(message: Message) : String {
         if (message.mentionedUsers.isEmpty()) {
             return "Thou shalt mention an ignaro, thou ${generator.generateInsult()}!"

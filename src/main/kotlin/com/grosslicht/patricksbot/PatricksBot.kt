@@ -21,6 +21,7 @@ fun main(args: Array<String>) {
     cmdHandler.registerCommand(PingCommand())
     //cmdHandler.registerCommand(CodeCommand())
     cmdHandler.registerCommand(RmCommand())
+    cmdHandler.registerCommand(StatusCommand())
     cmdHandler.registerCommand(Insulter())
     cmdHandler.registerCommand(HelpCommand(cmdHandler))
 }

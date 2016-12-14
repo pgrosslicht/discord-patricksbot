@@ -30,7 +30,7 @@ annotation class Command(
         /**
          * Gets whether the command is only for admins or not.
          */
-        val requiredPermissions: String = "none",
+        val onlyOwner: Boolean = false,
         /**
          * Gets whether the command should be shown in the help page or not.
          */

@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException
  * Created by patrickgrosslicht on 03/11/16.
  */
 class JDACommandHandler(jda: JDA): CommandHandler() {
+    val OWNER_ID = "135726717363945472"
     companion object: KLogging()
     init {
         jda.addEventListener(EventListener { event ->
@@ -54,6 +55,9 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
             return
         }
         if (!event.isFromType(ChannelType.PRIVATE) && !commandAnnotation.channelMessages) {
+            return
+        }
+        if (commandAnnotation.onlyOwner && event.author.id != OWNER_ID) {
             return
         }
         val parameters = getParameters(splitMessage, command, event)

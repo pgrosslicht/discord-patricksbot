@@ -82,7 +82,7 @@ class Insulter : CommandExecutor {
         if (message.mentionedUsers.isEmpty()) {
             return "Thou shalt mention an ignaro, thou ${generator.generateInsult()}!"
         }
-        return message.mentionedUsers.map { u -> u.asMention }.joinToString(", ")
+        return message.mentionedUsers.map { u -> u.name }.joinToString(", ")
                 .plus(" ${if (message.mentionedUsers.size > 1) "ye" else "thou"} ${generator.generateInsult()}${if (message.mentionedUsers.size > 1) "s!" else "!"}")
     }
 }

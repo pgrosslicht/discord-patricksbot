@@ -11,8 +11,7 @@ import net.dv8tion.jda.core.JDABuilder
 //TODO: Logging
 fun main(args: Array<String>) {
     val builder = JDABuilder(AccountType.BOT)
-    //val token = System.getenv("DISCORD_API_TOKEN")
-    val token = "MjE2MTc5NDk4NjgzNTk2ODAy.CygW9w.QuAjY2tqDCjt1gzIUiEbk5Z6EnQ"
+    val token = System.getenv("DISCORD_API_TOKEN")
     builder.setToken(token)
     val jda = builder.buildBlocking()
     jda.addEventListener(Logging())

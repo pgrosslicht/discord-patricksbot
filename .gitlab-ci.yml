@@ -2,7 +2,7 @@ image: pdgwien/gradle-docker
 
 variables:
   CONTAINER_IMAGE: gitlab-registry.grosslicht.com/discord/patricksbot
-  
+
 before_script:
   - export GRADLE_USER_HOME=/cache/.gradle
   - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN gitlab-registry.grosslicht.com
@@ -13,7 +13,8 @@ stages:
 build:
   stage: build
   script:
-    - gradle --no-daemon build assembleDist dockerBuildImage tagAsLatest dockerPushImage
+    - gradle build assembleDist dockerBuildImage tagAsLatest
+    - docker push $CONTAINER_IMAGE
   allow_failure: false
   only:
     - master

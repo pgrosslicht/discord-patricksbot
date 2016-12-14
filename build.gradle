@@ -78,6 +78,8 @@ processResources {
     }
 }
 
+def dockerImage = System.getenv('CI_REGISTRY_IMAGE')
+
 task dockerCopyDistResources(type: Copy, dependsOn: distTar) {
     description = "Copies the distribution resources to a temporary directory for image creation."
     group = 'docker'
@@ -98,22 +100,14 @@ task dockerDistTar(type: com.bmuschko.gradle.docker.tasks.image.Dockerfile, depe
 task dockerBuildImage(type: com.bmuschko.gradle.docker.tasks.image.DockerBuildImage, dependsOn: 'dockerDistTar') {
     description = 'Builds the Docker image for the Java application.'
     conventionMapping.inputDir = { dockerDistTar.destFile.parentFile }
-    conventionMapping.tag = { "gitlab-registry.grosslicht.com/discord/patricksbot:${project.version}".toString() }
+    conventionMapping.tag = { "${dockerImage}:${project.version}".toString() }
 }
 
 
 task tagAsLatest(type: com.bmuschko.gradle.docker.tasks.image.DockerTagImage, dependsOn: 'dockerBuildImage') {
     targetImageId { dockerBuildImage.getImageId() }
-    repository = "gitlab-registry.grosslicht.com/discord/patricksbot"
+    repository = dockerImage
     tag = 'latest'
-}
-
-task dockerPushImage(type: com.bmuschko.gradle.docker.tasks.image.DockerPushImage, dependsOn: 'tagAsLatest') {
-    imageName = "gitlab-registry.grosslicht.com/discord/patricksbot"
-    registryCredentials = new DockerRegistryCredentials()
-    registryCredentials.url = "https://gitlab-registry.grosslicht.com"
-    registryCredentials.username = 'gitlab-ci-token'
-    registryCredentials.password = System.getenv('CI_BUILD_TOKEN')
 }
 
 class Version {

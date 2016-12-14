@@ -14,8 +14,8 @@ import net.dv8tion.jda.core.MessageBuilder
  */
 class HelpCommand(private val commandHandler: CommandHandler) : CommandExecutor {
 
-    @Command(aliases = arrayOf(".help", ".commands"), description = "Shows this page")
-    fun onHelpCommand(): String {
+    @Command(aliases = arrayOf(".help"), description = "Shows this page.")
+    fun onHelpCommand(style: String = "light"): String {
         val builder = MessageBuilder()
         val table = V2_AsciiTable()
         table.addRule()
@@ -28,7 +28,14 @@ class HelpCommand(private val commandHandler: CommandHandler) : CommandExecutor 
                     table.addRule()
                 }
         val renderer = V2_AsciiTableRenderer()
-        renderer.setTheme(V2_E_TableThemes.UTF_LIGHT.get())
+        when (style) {
+            "double" -> renderer.setTheme(V2_E_TableThemes.UTF_DOUBLE.get())
+            "double-light" -> renderer.setTheme(V2_E_TableThemes.UTF_DOUBLE_LIGHT.get())
+            "strong-double" -> renderer.setTheme(V2_E_TableThemes.UTF_STRONG_DOUBLE.get())
+            "light-double" -> renderer.setTheme(V2_E_TableThemes.UTF_LIGHT_DOUBLE.get())
+            "heavy" -> renderer.setTheme(V2_E_TableThemes.UTF_HEAVY.get())
+            else -> renderer.setTheme(V2_E_TableThemes.UTF_LIGHT.get())
+        }
         renderer.setWidth(WidthAbsoluteEven(85))
         builder.appendCodeBlock(renderer.render(table).toStrBuilder(), "xml")
         return builder.build().content

@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
  * Created by patrickgrosslicht on 15/11/16.
  */
 class InfoCommand : CommandExecutor {
-    @Command(aliases = arrayOf(".version", ".build"), description = "Shows what build the bot is running")
+    @Command(aliases = arrayOf(".version", ".build"), description = "Shows what build the bot is running.")
     fun onVersionCommand(): String {
         return "I am PatricksBot v${getVersion()}"
     }

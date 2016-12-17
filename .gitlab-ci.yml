@@ -20,6 +20,3 @@ build:
     - master
   tags:
     - docker
-  artifacts:
-    paths:
-      - "build/distributions/*.tar"

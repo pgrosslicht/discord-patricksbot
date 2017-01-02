@@ -5,6 +5,7 @@ import com.grosslicht.patricksbot.command.impl.*
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 
+
 /**
  * Created by patrickgrosslicht on 13/10/16.
  */
@@ -23,5 +24,7 @@ fun main(args: Array<String>) {
     cmdHandler.registerCommand(RmCommand())
     cmdHandler.registerCommand(StatusCommand())
     cmdHandler.registerCommand(Insulter())
+    cmdHandler.registerCommand(ScanCommand())
     cmdHandler.registerCommand(HelpCommand(cmdHandler))
+
 }

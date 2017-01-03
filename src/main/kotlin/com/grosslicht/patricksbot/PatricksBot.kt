@@ -2,9 +2,6 @@ package com.grosslicht.patricksbot
 
 import com.grosslicht.patricksbot.command.JDACommandHandler
 import com.grosslicht.patricksbot.command.impl.*
-import com.grosslicht.patricksbot.models.Models
-import io.requery.sql.SchemaModifier
-import io.requery.sql.TableCreationMode
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 
@@ -29,9 +26,4 @@ fun main(args: Array<String>) {
     cmdHandler.registerCommand(Insulter())
     cmdHandler.registerCommand(ScanCommand())
     cmdHandler.registerCommand(HelpCommand(cmdHandler))
-
-    val dataSource = DataSource.dataSource
-    val model = Models.DEFAULT
-    SchemaModifier(dataSource, model).createTables(TableCreationMode.DROP_CREATE)
-
 }

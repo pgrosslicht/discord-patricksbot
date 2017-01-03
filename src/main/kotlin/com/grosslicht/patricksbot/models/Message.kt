@@ -32,4 +32,9 @@ interface Message : Persistable {
     var isDeleted: Boolean
 
     var isEdited: Boolean
+
+    var mentionsEverybody: Boolean
+
+    @get:OneToMany
+    val mentions: MutableSet<Mention>
 }

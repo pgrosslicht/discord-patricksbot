@@ -7,6 +7,7 @@ import mu.KLogging
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.MessageHistory
 import net.dv8tion.jda.core.entities.Message
+import kotlin.concurrent.thread
 
 /**
  * Created by patrickgrosslicht on 02/01/17.
@@ -21,7 +22,9 @@ class ScanCommand : CommandExecutor {
 
     fun walkChannelHistory(history: MessageHistory) {
         history.retrievePast(100).queue { list ->
-            list.forEach { msg: Message -> msg.upsert() }
+            thread {
+                list.forEach { msg: Message -> msg.upsert() }
+            }
             if (list.size == 100) {
                 logger.debug { "Getting another 100!" }
                 walkChannelHistory(history)

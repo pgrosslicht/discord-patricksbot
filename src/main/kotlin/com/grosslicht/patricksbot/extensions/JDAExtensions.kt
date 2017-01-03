@@ -2,6 +2,9 @@ package com.grosslicht.patricksbot.extensions
 
 import com.grosslicht.patricksbot.DataSource
 import com.grosslicht.patricksbot.models.*
+import io.requery.kotlin.Offset
+import io.requery.kotlin.eq
+import io.requery.query.Result
 import net.dv8tion.jda.core.entities.TextChannel
 
 /**
@@ -54,6 +57,21 @@ fun net.dv8tion.jda.core.entities.User.findOrCreate(): User {
     }
 }
 
+fun net.dv8tion.jda.core.entities.User.findOrCreateMention(msg: Message): Mention {
+    val data = DataSource.data
+    val user = this.findOrCreate()
+    val result: Offset<Result<MentionEntity>> = data.select(MentionEntity::class) where (Mention::user eq user and (Mention::message eq msg)) limit 1
+    var newMention: Mention? = result.get().firstOrNull()
+    if (newMention == null) {
+        newMention = MentionEntity()
+        newMention.setMessage(msg)
+        newMention.setUser(user)
+        return data.insert(newMention)
+    } else {
+        return newMention
+    }
+}
+
 fun net.dv8tion.jda.core.entities.Message.Attachment.findOrCreate(msg: Message): MessageAttachment {
     val data = DataSource.data
     var newAttachment: MessageAttachment? = data.findByKey(MessageAttachment::class, this.id)
@@ -79,10 +97,16 @@ fun net.dv8tion.jda.core.entities.Message.create(): Message {
     msg.setChannel(channel)
     msg.content = this.content
     msg.setId(this.id)
+    msg.mentionsEverybody = this.mentionsEveryone()
     msg.setTime(this.creationTime)
     val res = data.insert(msg)
     if (this.attachments.isNotEmpty()) {
         this.attachments.forEach { attachments: net.dv8tion.jda.core.entities.Message.Attachment -> attachments.findOrCreate(msg) }
+    }
+    if (this.mentionedUsers.isNotEmpty()) {
+        this.mentionedUsers.forEach { user: net.dv8tion.jda.core.entities.User ->
+            val mention = user.findOrCreateMention(msg)
+        }
     }
     return res
 }
@@ -96,6 +120,14 @@ fun net.dv8tion.jda.core.entities.Message.upsert(): Message {
     msg.setChannel(channel)
     msg.content = this.content
     msg.setId(this.id)
+    msg.mentionsEverybody = this.mentionsEveryone()
     msg.setTime(this.creationTime)
-    return data.upsert(msg)
+    val res = data.upsert(msg)
+    if (this.attachments.isNotEmpty()) {
+        this.attachments.forEach { attachments: net.dv8tion.jda.core.entities.Message.Attachment -> attachments.findOrCreate(msg) }
+    }
+    if (this.mentionedUsers.isNotEmpty()) {
+        this.mentionedUsers.forEach { user: net.dv8tion.jda.core.entities.User -> user.findOrCreateMention(msg) }
+    }
+    return res
 }

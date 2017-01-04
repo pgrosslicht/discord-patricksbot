@@ -12,17 +12,14 @@ import com.grosslicht.patricksbot.models.User
  */
 object DBCache {
     val userCache: Cache<String, User> = CacheBuilder.newBuilder()
-            .recordStats()
             .maximumSize(System.getenv("USER_CACHE_SIZE")?.toLong() ?: 500)
             .build()
 
     val channelCache: Cache<String, Channel> = CacheBuilder.newBuilder()
-            .recordStats()
             .maximumSize(System.getenv("CHANNEL_CACHE_SIZE")?.toLong() ?: 100)
             .build()
 
     val guildCache: Cache<String, Guild> = CacheBuilder.newBuilder()
-            .recordStats()
             .maximumSize(System.getenv("GUILD_CACHE_SIZE")?.toLong() ?: 100)
             .build()
 }

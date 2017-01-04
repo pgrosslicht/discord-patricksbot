@@ -1,37 +1,50 @@
 package com.grosslicht.patricksbot.command.impl
 
+import com.google.common.base.Stopwatch
 import com.grosslicht.patricksbot.command.Command
 import com.grosslicht.patricksbot.command.CommandExecutor
 import mu.KLogging
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.MessageHistory
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by patrickgrosslicht on 02/01/17.
  */
 class ScanCommand : CommandExecutor {
     companion object: KLogging()
-    var scanner: Scanner? = null
+    var i = 0
+    var stopwatch = Stopwatch.createUnstarted()
+    var scanners: MutableMap<String, Scanner> = HashMap()
+    var scannerThreads: MutableMap<String, Thread> = HashMap()
 
-    @Command(aliases = arrayOf(".scan"), showInHelpPage = false, onlyOwner = true)
-    fun scan(cmd: String, channel: String, jda: JDA) {
-        if (scanner == null) {
-            scanner = Scanner()
-            scanner?.run()
-        }
-        walkChannelHistory(jda.getTextChannelById(channel).history)
+    @Command(aliases = arrayOf(".scan"), showInHelpPage = false, onlyOwner = true, async = true)
+    fun scan(cmd: String, channelId: String, jda: JDA) {
+        i = 0
+        logger.debug { "Scan started for $channelId" }
+        val scanner = Scanner()
+        val scannerThread = Thread(scanner)
+        scannerThread.start()
+        scanners.put(channelId, scanner)
+        scannerThreads.put(channelId, scannerThread)
+        stopwatch = Stopwatch.createStarted()
+        walkChannelHistory(channelId, jda.getTextChannelById(channelId).history)
     }
 
-    fun walkChannelHistory(history: MessageHistory) {
+    fun walkChannelHistory(channelId: String, history: MessageHistory) {
         history.retrievePast(100).queue { list ->
-            scanner?.addAll(list)
+            i += list.size
+            scanners[channelId]?.addAll(list)
             if (list.size == 100) {
-                logger.debug { "Getting another 100!" }
-                walkChannelHistory(history)
+                logger.debug { "Getting another 100! Already got $i" }
+                walkChannelHistory(channelId, history)
             } else {
-                logger.debug { "Finished scan" }
-                scanner?.stop()
-                scanner = null
+                stopwatch.stop()
+                logger.debug { "Finished scan for $channelId. Scanned $i messages in ${stopwatch.elapsed(TimeUnit.MILLISECONDS)} ms." }
+                scannerThreads[channelId]?.interrupt()
+                scanners.remove(channelId)
+                scannerThreads.remove(channelId)
             }
         }
     }

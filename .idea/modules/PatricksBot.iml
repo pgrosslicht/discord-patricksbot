@@ -104,6 +104,7 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Gradle: io.requery:requery:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.guava:guava:21.0-rc2" level="project" />
     <orderEntry type="library" name="Gradle: org.mariadb.jdbc:mariadb-java-client:1.5.5" level="project" />
     <orderEntry type="library" name="Gradle: io.requery:requery-kotlin:1.1.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib:1.0.5" level="project" />

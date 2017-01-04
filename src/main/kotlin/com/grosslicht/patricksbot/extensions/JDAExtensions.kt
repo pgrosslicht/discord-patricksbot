@@ -1,5 +1,6 @@
 package com.grosslicht.patricksbot.extensions
 
+import com.grosslicht.patricksbot.DBCache
 import com.grosslicht.patricksbot.DataSource
 import com.grosslicht.patricksbot.models.*
 import io.requery.kotlin.Offset
@@ -12,49 +13,55 @@ import net.dv8tion.jda.core.entities.TextChannel
  */
 
 fun TextChannel.findOrCreate(): Channel {
-    val data = DataSource.data
-    var newChannel: Channel? = data.findByKey(Channel::class, this.id)
-    if (newChannel == null) {
-        newChannel = ChannelEntity()
-        newChannel.setId(this.id)
-        newChannel.setName(this.name)
-        val guild: Guild = this.guild.findOrCreate()
-        newChannel.setGuild(guild)
-        return data.insert(newChannel)
-    } else {
-        return newChannel
-    }
+    return DBCache.channelCache[this.id, {
+        val data = DataSource.data
+        var newChannel: Channel? = data.findByKey(Channel::class, this.id)
+        if (newChannel == null) {
+            newChannel = ChannelEntity()
+            newChannel.setId(this.id)
+            newChannel.setName(this.name)
+            val guild: Guild = this.guild.findOrCreate()
+            newChannel.setGuild(guild)
+            data.insert(newChannel)
+        } else {
+            newChannel
+        }
+    }]
 }
 
 fun net.dv8tion.jda.core.entities.Guild.findOrCreate(): Guild {
-    val data = DataSource.data
-    var newGuild: Guild? = data.findByKey(Guild::class, this.id)
-    if (newGuild == null) {
-        newGuild = GuildEntity()
-        newGuild.setId(this.id)
-        newGuild.setName(this.name)
-        val owner = this.owner.user.findOrCreate()
-        newGuild.setOwner(owner)
-        return data.insert(newGuild)
-    } else {
-        return newGuild
-    }
+    return DBCache.guildCache[this.id, {
+        val data = DataSource.data
+        var newGuild: Guild? = data.findByKey(Guild::class, this.id)
+        if (newGuild == null) {
+            newGuild = GuildEntity()
+            newGuild.setId(this.id)
+            newGuild.setName(this.name)
+            val owner = this.owner.user.findOrCreate()
+            newGuild.setOwner(owner)
+            data.insert(newGuild)
+        } else {
+            newGuild
+        }
+    }]
 }
 
 fun net.dv8tion.jda.core.entities.User.findOrCreate(): User {
-    val data = DataSource.data
-    var newUser: User? = data.findByKey(User::class, this.id)
-    if (newUser == null) {
-        newUser = UserEntity()
-        newUser.setAvatarId(this.avatarId)
-        newUser.setBot(this.isBot)
-        newUser.setDiscriminator(this.discriminator)
-        newUser.setId(this.id)
-        newUser.setName(this.name)
-        return data.insert(newUser)
-    } else {
-        return newUser
-    }
+    return DBCache.userCache[this.id, {
+        val data = DataSource.data
+        var newUser: User? = data.findByKey(User::class, this.id)
+        if (newUser == null) {
+            newUser = UserEntity()
+            newUser.setAvatarId(this.avatarId)
+            newUser.setBot(this.isBot)
+            newUser.setDiscriminator(this.discriminator)
+            newUser.setId(this.id)
+            newUser.setName(this.name)
+            data.insert(newUser)
+        } else {
+            newUser
+        }
+    }]
 }
 
 fun net.dv8tion.jda.core.entities.User.findOrCreateMention(msg: Message): Mention {

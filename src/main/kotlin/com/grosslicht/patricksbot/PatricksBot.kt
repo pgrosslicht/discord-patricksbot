@@ -6,6 +6,8 @@ import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 
 
+
+
 /**
  * Created by patrickgrosslicht on 13/10/16.
  */
@@ -18,12 +20,12 @@ fun main(args: Array<String>) {
     jda.addEventListener(Logging())
     jda.addEventListener(OfflineWarner())
     val cmdHandler = JDACommandHandler(jda)
+    cmdHandler.registerCommand(ScanCommand())
     cmdHandler.registerCommand(InfoCommand())
     cmdHandler.registerCommand(PingCommand())
     //cmdHandler.registerCommand(CodeCommand())
     cmdHandler.registerCommand(RmCommand())
     cmdHandler.registerCommand(StatusCommand())
     cmdHandler.registerCommand(Insulter())
-    cmdHandler.registerCommand(ScanCommand())
     cmdHandler.registerCommand(HelpCommand(cmdHandler))
 }

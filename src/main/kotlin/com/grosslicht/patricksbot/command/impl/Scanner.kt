@@ -9,26 +9,27 @@ import java.util.concurrent.ConcurrentLinkedQueue
  * Created by patrickgrosslicht on 03/01/17.
  */
 class Scanner : Runnable {
-    companion object: KLogging()
+    companion object : KLogging()
+
     val queue = ConcurrentLinkedQueue<Message>()
-    var running = true
     override fun run() {
-        while (running) {
-            while (queue.isNotEmpty()) {
-                try {
-                    queue.poll().upsert()
-                } catch (e: Exception) {
-                    logger.error { e }
+        while (!Thread.currentThread().isInterrupted) {
+            try {
+                while (queue.isNotEmpty()) {
+                    try {
+                        queue.poll().upsert()
+                    } catch (e: io.requery.sql.StatementExecutionException) {
+                        logger.error { e }
+                    }
                 }
+                Thread.sleep(1000)
+            } catch (e: InterruptedException) {
+                Thread.currentThread().interrupt()
             }
         }
     }
 
     fun addAll(e: Collection<Message>) {
         queue.addAll(e)
-    }
-
-    fun stop() {
-        running = false
     }
 }

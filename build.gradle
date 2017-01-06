@@ -93,7 +93,7 @@ idea {
     }
 }
 
-def versionObj = new Version(major: 4, minor: 0, revision: 1)
+def versionObj = new Version(major: 4, minor: 0, revision: 2)
 project.version = "${versionObj}"
 
 processResources {

@@ -23,7 +23,7 @@ class Welcomer : ListenerAdapter() {
                 event.guild.controller.addRolesToMember(event.member, event.guild.getRolesByName("non-human", true)).queue()
             }
         } else {
-            channel.sendMessage(MessageBuilder().appendFormat("Welcome %U%! We hope you have a good time here. Let me just ping the staff to give you a proper hello. Also, I'll give you your appropriate role now. %R%", event.member.user, event.guild.getRolesByName("administrator", true).first()).build()).queue {
+            channel.sendMessage(MessageBuilder().appendFormat("Welcome %U%! We hope you have a good time here. Also, I'll give you your appropriate role now.", event.member.user).build()).queue {
                 event.guild.controller.addRolesToMember(event.member, event.guild.getRolesByName("human", true)).queue()
             }
         }

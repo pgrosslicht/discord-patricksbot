@@ -34,7 +34,7 @@ class Welcomer : ListenerAdapter() {
             event.guild.getTextChannelsByName("general", true).first()
         })
         if (event.member.user.isBot) {
-            channel.sendMessage("I guess that ${event.member.user.name} didn't work out. Now we're down to ${event.guild.members.filter { m -> m.user.isBot }.size} bots.").queue()
+            channel.sendMessage("I guess that ${event.member.user.name} didn't work out. He was here for ${Duration.between(event.member.joinDate, OffsetDateTime.now())}. Now we're down to ${event.guild.members.filter { m -> m.user.isBot }.size} bots.").queue()
         } else {
             channel.sendMessage(MessageBuilder().appendFormat("%U% just fucking left. WTF? And he's only been here for ${Duration.between(event.member.joinDate, OffsetDateTime.now())}.", event.member.user).build()).queue()
         }

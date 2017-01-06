@@ -19,11 +19,11 @@ class Welcomer : ListenerAdapter() {
             event.guild.getTextChannelsByName("general", true).first()
         })
         if (event.member.user.isBot) {
-            channel.sendMessage("Oh look, another bot! Welcome ${event.member.nickname}! Now we have ${event.guild.members.filter { m -> m.user.isBot }.size} bots. Let me go ahead and give it the correct permissions.").queue {
+            channel.sendMessage("Oh look, another bot! Welcome ${event.member.user.name}! Now we have ${event.guild.members.filter { m -> m.user.isBot }.size} bots. Let me go ahead and give it the correct permissions.").queue {
                 event.guild.controller.addRolesToMember(event.member, event.guild.getRolesByName("non-human", true)).queue()
             }
         } else {
-            channel.sendMessage(MessageBuilder().appendFormat("Welcome %U%! We hope you have a good time here. Also, I'll give you your appropriate role now.", event.member.user).build()).queue {
+            channel.sendMessage(MessageBuilder().appendFormat("Welcome %U%! We hope you have a good time here. Let me just ping the staff to give you a proper hello. Also, I'll give you your appropriate role now. %R%", event.member.user, event.guild.getRolesByName("administrator", true).first()).build()).queue {
                 event.guild.controller.addRolesToMember(event.member, event.guild.getRolesByName("human", true)).queue()
             }
         }
@@ -34,7 +34,7 @@ class Welcomer : ListenerAdapter() {
             event.guild.getTextChannelsByName("general", true).first()
         })
         if (event.member.user.isBot) {
-            channel.sendMessage("I guess that ${event.member.nickname} didn't work out. Now we're down to ${event.guild.members.filter { m -> m.user.isBot }.size} bots.").queue()
+            channel.sendMessage("I guess that ${event.member.user.name} didn't work out. Now we're down to ${event.guild.members.filter { m -> m.user.isBot }.size} bots.").queue()
         } else {
             channel.sendMessage(MessageBuilder().appendFormat("%U% just fucking left. WTF? And he's only been here for ${Duration.between(event.member.joinDate, OffsetDateTime.now())}.", event.member.user).build()).queue()
         }

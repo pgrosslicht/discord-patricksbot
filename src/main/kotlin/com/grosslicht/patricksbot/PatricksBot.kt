@@ -5,13 +5,9 @@ import com.grosslicht.patricksbot.command.impl.*
 import net.dv8tion.jda.core.AccountType
 import net.dv8tion.jda.core.JDABuilder
 
-
-
-
 /**
  * Created by patrickgrosslicht on 13/10/16.
  */
-//TODO: Logging
 fun main(args: Array<String>) {
     val builder = JDABuilder(AccountType.BOT)
     val token = System.getenv("DISCORD_API_TOKEN")
@@ -19,11 +15,12 @@ fun main(args: Array<String>) {
     val jda = builder.buildBlocking()
     jda.addEventListener(Logging())
     jda.addEventListener(OfflineWarner())
+    jda.addEventListener(Welcomer())
     val cmdHandler = JDACommandHandler(jda)
     cmdHandler.registerCommand(ScanCommand())
     cmdHandler.registerCommand(InfoCommand())
     cmdHandler.registerCommand(PingCommand())
-    //cmdHandler.registerCommand(CodeCommand())
+    cmdHandler.registerCommand(CodeCommand())
     cmdHandler.registerCommand(RmCommand())
     cmdHandler.registerCommand(StatusCommand())
     cmdHandler.registerCommand(Insulter())

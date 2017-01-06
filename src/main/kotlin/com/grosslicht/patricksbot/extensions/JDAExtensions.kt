@@ -7,6 +7,7 @@ import io.requery.kotlin.Offset
 import io.requery.kotlin.eq
 import io.requery.query.Result
 import net.dv8tion.jda.core.entities.TextChannel
+import java.time.ZonedDateTime
 
 /**
  * Created by patrickgrosslicht on 02/01/17.
@@ -77,6 +78,16 @@ fun net.dv8tion.jda.core.entities.User.findOrCreateMention(msg: Message): Mentio
     } else {
         return newMention
     }
+}
+
+fun net.dv8tion.jda.core.entities.User.createIncident(offlineTime: ZonedDateTime, onlineTime: ZonedDateTime): Incident {
+    val data = DataSource.data
+    val user = this.findOrCreate()
+    val newIncident = IncidentEntity()
+    newIncident.setOfflineTime(offlineTime)
+    newIncident.setOnlineTime(onlineTime)
+    newIncident.setUser(user)
+    return data.insert(newIncident)
 }
 
 fun net.dv8tion.jda.core.entities.Message.Attachment.findOrCreate(msg: Message): MessageAttachment {

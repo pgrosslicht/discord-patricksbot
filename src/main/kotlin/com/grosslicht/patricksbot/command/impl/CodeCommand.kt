@@ -8,11 +8,12 @@ import com.grosslicht.patricksbot.command.CommandExecutor
 import mu.KLogging
 import net.dv8tion.jda.core.MessageBuilder
 import net.dv8tion.jda.core.entities.Message
+import net.dv8tion.jda.core.entities.MessageChannel
 import org.apache.commons.codec.binary.Base64
+import java.net.URLEncoder
 import java.time.Instant
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-
 
 
 /**
@@ -25,12 +26,14 @@ class CodeCommand : CommandExecutor {
         val timeCreated = Instant.now().toEpochMilli()
         var mac: String
         val secretToken = "76r5vn7gvp76xtj1"
+
         init {
             val hmac = Mac.getInstance("HmacSHA256")
             hmac.init(SecretKeySpec(secretToken.toByteArray(), "HmacSHA256"))
             mac = Base64.encodeBase64String(hmac.doFinal(timeCreated.toString().toByteArray()))
         }
     }
+
     val languageAliases = hashMapOf(Pair("python3", "python3"),
             Pair("python", "python"),
             Pair("ruby", "ruby"),
@@ -59,46 +62,47 @@ class CodeCommand : CommandExecutor {
 
     fun getLanguage(msg: String) = msg.substring(msg.indexOf("```") + 3, msg.indexOf("\n"))
 
-    fun executeCode(language: String, code: String) : String {
+    fun executeCode(channel: MessageChannel, language: String, code: String) {
         val token = Token()
-        var string = StringBuilder()
         var output = MessageBuilder()
-        "https://api.repl.it/eval".httpPost(listOf(Pair("auth", "${token.timeCreated}:${token.mac}"), Pair("language", language), Pair("code", code)))
+        "https://api.repl.it/eval?auth=${token.timeCreated}:${URLEncoder.encode(token.mac, "UTF-8")}&language=$language".httpPost(listOf(Pair("code", code)))
                 .header(mapOf("Content-Type" to "application/x-www-form-urlencoded", "Accept" to "application/json"))
                 .responseString { request, response, result ->
-                result.fold({ d ->
-                    logger.debug { d }
-                    val results = Gson().fromJson<List<CodeResult>>(d)
-                    logger.debug { results }
-                    for ((command, data, error) in results) {
-                        if (error != "") {
-                            output.appendCodeBlock(error, language)
+                    result.fold({ d ->
+                        val results = Gson().fromJson<List<CodeResult>>(d)
+                        output = output.append("```$language\n")
+                        for ((command, data, error) in results) {
+                            if (error != "") {
+                                output = output.append(error)
+                            }
+                            if (command == "output") {
+                                output = output.append(data)
+                            } else if (command == "result") {
+                                output = output.append("```")
+                                channel.sendMessage(output.build()).queue()
+                            }
                         }
-                        if (command == "result") {
-                            string.append(data)
-                        } else if (command == "output") {
-                            output.appendCodeBlock(string.toString(), language)
-                        }
-                    }
-                }, { err ->
-                    output.append("Error while executing code")
-                    logger.debug { err }
-                })
-            }
-        return output.build().toString()
+                    }, { err ->
+                        output.append("Error while executing code")
+                        channel.sendMessage(output.build()).queue()
+                        logger.debug { err }
+                    })
+                }
     }
 
-    @Command(aliases = arrayOf(".code"), description = "Compiles code")
-    fun handleCommand(message: Message): String {
+    @Command(aliases = arrayOf(".code"), description = "Compiles code", async = true)
+    fun handleCommand(message: Message) {
         if (message.content == ".code supported") {
-            return supportedLanguages.joinToString(", ")
+            message.channel.sendMessage(supportedLanguages.joinToString(", ")).queue()
         } else if (message.content.startsWith(".code ```")) {
             val lang = getLanguage(message.content)
             if (languageAliases[lang] == null) {
-                return "This language is not supported, type `.code supported` to see the supported languages."
+                message.channel.sendMessage("This language is not supported, type `.code supported` to see the supported languages.").queue()
+            } else {
+                executeCode(message.channel, languageAliases[lang]!!, message.content.substring(message.content.indexOf("```"), message.content.lastIndexOf("```") + 3).replace(Regex("(^```(\\w+)?)|(```$)"), "").trim())
             }
-            return executeCode(lang, message.content.substring(message.content.indexOf("```"), message.content.lastIndexOf("```") + 3).replace(Regex("(^```(\\w+)?)|(```$)"), "").trim())
+        } else {
+            message.channel.sendMessage("Usage: `.code ```language codeToExecute```").queue()
         }
-        return "Usage: `.code ```language codeToExecute```"
     }
 }

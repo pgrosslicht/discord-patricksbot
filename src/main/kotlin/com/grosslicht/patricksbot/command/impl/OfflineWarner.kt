@@ -1,5 +1,6 @@
 package com.grosslicht.patricksbot.command.impl
 
+import com.grosslicht.patricksbot.extensions.createIncident
 import mu.KLogging
 import net.dv8tion.jda.core.MessageBuilder
 import net.dv8tion.jda.core.OnlineStatus
@@ -8,6 +9,8 @@ import net.dv8tion.jda.core.events.user.UserOnlineStatusUpdateEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
 import java.time.Duration
 import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import java.util.*
 
 /**
@@ -15,32 +18,28 @@ import java.util.*
  */
 class OfflineWarner : ListenerAdapter() {
     companion object : KLogging()
-    val map = HashMap<String, LocalDateTime>()
-    override fun onUserOnlineStatusUpdate(event: UserOnlineStatusUpdateEvent?) {
-        if (event == null)
-            return
+    val map = HashMap<String, ZonedDateTime>()
+    val ownerMap : Map<String, String> = HashMap<String, String>(mapOf("219898908074049547" to "103255776218345472", //Magic 8-Ball
+                                                "196809469458382848" to "103255776218345472", //Soring Markov
+                                                "220006633365831680" to "103255776218345472", //{U}
+                                                "196059744991969280" to "103255776218345472", //Nora
+                                                "197553759151194112" to "103267161757204480" //Pancake
+            ))
+    override fun onUserOnlineStatusUpdate(event: UserOnlineStatusUpdateEvent) {
         if (event.previousOnlineStatus == OnlineStatus.ONLINE && event.user.isBot) {
             logger.debug { "A bot that was online has gone offline, check which one" }
             val member = event.guild.getMember(event.user)
             if (member.onlineStatus == OnlineStatus.OFFLINE) {
-                when (event.user.id) {
-                    "219898908074049547" -> messageOwner(event, "103255776218345472", event.user) //Magic 8-Ball
-                    "196809469458382848" -> messageOwner(event, "103255776218345472", event.user) //Sorin Markov
-                    "220006633365831680" -> messageOwner(event, "103255776218345472", event.user) //{U}
-                    "196059744991969280" -> messageOwner(event, "103255776218345472", event.user) //Nora
-                    "197553759151194112" -> messageOwner(event, "103267161757204480", event.user) //Pancake
+                if (ownerMap.contains(event.user.id)) {
+                    messageOwner(event, ownerMap[event.user.id]!!, event.user)
                 }
             }
         } else if (event.previousOnlineStatus == OnlineStatus.OFFLINE && event.user.isBot) {
             logger.debug { "A bot that was offline has gone online, check which one" }
             val member = event.guild.getMember(event.user)
             if (member.onlineStatus == OnlineStatus.ONLINE) {
-                when (event.user.id) {
-                    "219898908074049547" -> messageOwnerOnline(event, "103255776218345472", event.user) //Magic 8-Ball
-                    "196809469458382848" -> messageOwnerOnline(event, "103255776218345472", event.user) //Sorin Markov
-                    "220006633365831680" -> messageOwnerOnline(event, "103255776218345472", event.user) //{U}
-                    "196059744991969280" -> messageOwnerOnline(event, "103255776218345472", event.user) //Nora
-                    "197553759151194112" -> messageOwnerOnline(event, "103267161757204480", event.user) //Pancake
+                if (ownerMap.contains(event.user.id)) {
+                    messageOwnerOnline(event, ownerMap[event.user.id]!!, event.user)
                 }
             }
         }
@@ -48,7 +47,7 @@ class OfflineWarner : ListenerAdapter() {
 
     fun messageOwner(event: UserOnlineStatusUpdateEvent, owner: String, affectedBot: User) {
         logger.debug { "${affectedBot.name} has gone offline at ${LocalDateTime.now()}" }
-        map.put(affectedBot.id, LocalDateTime.now())
+        map.put(affectedBot.id, ZonedDateTime.now(ZoneId.of("Z")))
         val message = MessageBuilder().appendFormat("Hey %U%, your bot %U% has just gone offline!", event.guild.getMemberById(owner).user, affectedBot)
         event.guild.getTextChannelById("138404620128092160").sendMessage(message.build()).queue()
     }
@@ -56,7 +55,8 @@ class OfflineWarner : ListenerAdapter() {
     fun messageOwnerOnline(event: UserOnlineStatusUpdateEvent, owner: String, affectedBot: User) {
         logger.debug { "${affectedBot.name} has come back online at ${LocalDateTime.now()}" }
         val date = map.getOrElse(affectedBot.id, { logger.debug { "Could not find time when bot went offline" }; return })
-        val duration = Duration.between(date, LocalDateTime.now())
+        val duration = Duration.between(date, ZonedDateTime.now())
+        affectedBot.createIncident(date, ZonedDateTime.now(ZoneId.of("Z")))
         val message = MessageBuilder().appendFormat("Well finally… That took %s for %s to come back online.", duration.toString(), affectedBot.name)
         event.guild.getTextChannelById("138404620128092160").sendMessage(message.build()).queue()
     }

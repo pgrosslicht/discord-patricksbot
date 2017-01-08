@@ -8,7 +8,6 @@ import com.kennycason.kumo.CollisionMode
 import com.kennycason.kumo.WordCloud
 import com.kennycason.kumo.WordFrequency
 import com.kennycason.kumo.bg.RectangleBackground
-import com.kennycason.kumo.font.FontWeight
 import com.kennycason.kumo.font.KumoFont
 import com.kennycason.kumo.font.scale.LinearFontScalar
 import com.kennycason.kumo.nlp.FrequencyAnalyzer
@@ -37,7 +36,7 @@ class WordCloudCommand : CommandExecutor {
         val dimension: Dimension = Dimension(1024, 1024)
         val wordCloud = WordCloud(dimension, CollisionMode.RECTANGLE)
         wordCloud.setPadding(0)
-        wordCloud.setKumoFont(KumoFont("LICENSE PLATE", FontWeight.BOLD))
+        wordCloud.setKumoFont(KumoFont(WordCloudCommand.javaClass.getResourceAsStream("/fonts/candarab.ttf")))
         wordCloud.setBackground(RectangleBackground(dimension))
         wordCloud.setColorPalette(ColorPalette(Color(0xD5CFFA), Color(0xBBB1FA), Color(0x9A8CF5),
                 Color(0x806EF5)))

@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import mu.KLogging
 import net.dv8tion.jda.core.entities.MessageChannel
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.concurrent.thread
 
 /**
  * Created by patrickgrosslicht on 08/01/17.
@@ -37,21 +38,23 @@ class CleverBot {
     }
 
     fun ask(question: String, channel: MessageChannel) {
-        channel.sendTyping().queue()
-        Thread.sleep(ThreadLocalRandom.current().nextLong(1000, 5000))
-        "https://cleverbot.io/1.0/ask".httpPost().body(Gson().toJson(AskRequest(System.getenv("CLEVERBOT_API_USER"), System.getenv("CLEVERBOT_API_KEY"), nick, question)))
-                .header(mapOf("Content-Type" to "application/json", "Accept" to "application/json", "User-Agent" to "PatricksBot/CleverBot"))
-                .responseString { request, response, result ->
-                    result.fold({ d ->
-                        val createResponse = Gson().fromJson<AskResponse>(d)
-                        if (createResponse.status == "success") {
-                            channel.sendMessage(createResponse.response).queue {  }
-                        } else {
-                            logger.error { createResponse.status }
-                        }
-                    }, { err ->
-                        logger.error { err }
-                    })
-                }
+        thread {
+            channel.sendTyping().queue()
+            Thread.sleep(ThreadLocalRandom.current().nextLong(1000, 5000))
+            "https://cleverbot.io/1.0/ask".httpPost().body(Gson().toJson(AskRequest(System.getenv("CLEVERBOT_API_USER"), System.getenv("CLEVERBOT_API_KEY"), nick, question)))
+                    .header(mapOf("Content-Type" to "application/json", "Accept" to "application/json", "User-Agent" to "PatricksBot/CleverBot"))
+                    .responseString { request, response, result ->
+                        result.fold({ d ->
+                            val createResponse = Gson().fromJson<AskResponse>(d)
+                            if (createResponse.status == "success") {
+                                channel.sendMessage(createResponse.response).queue { }
+                            } else {
+                                logger.error { createResponse.status }
+                            }
+                        }, { err ->
+                            logger.error { err }
+                        })
+                    }
+        }
     }
 }

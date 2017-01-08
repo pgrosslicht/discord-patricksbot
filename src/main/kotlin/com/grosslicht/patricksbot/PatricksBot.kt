@@ -16,6 +16,7 @@ fun main(args: Array<String>) {
     jda.addEventListener(Logging())
     jda.addEventListener(OfflineWarner())
     jda.addEventListener(Welcomer())
+    jda.addEventListener(CleverBotListener())
     val cmdHandler = JDACommandHandler(jda)
     cmdHandler.registerCommand(ScanCommand())
     cmdHandler.registerCommand(InfoCommand())

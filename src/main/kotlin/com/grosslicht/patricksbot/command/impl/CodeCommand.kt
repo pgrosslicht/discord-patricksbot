@@ -85,7 +85,7 @@ class CodeCommand : CommandExecutor {
                     }, { err ->
                         output.append("Error while executing code")
                         channel.sendMessage(output.build()).queue()
-                        logger.debug { err }
+                        logger.error { err }
                     })
                 }
     }

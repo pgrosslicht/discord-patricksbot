@@ -66,6 +66,7 @@ dependencies {
     compile 'de.vandermeer:asciitable:0.2.5'
     compile 'org.mariadb.jdbc:mariadb-java-client:1.5.5'
     compile 'com.google.guava:guava:21.0-rc2'
+    compile 'ca.pjer:chatter-bot-api:1.4.5'
     compile 'net.dv8tion:JDA:3.0.BETA2_108'
 
 
@@ -93,7 +94,7 @@ idea {
     }
 }
 
-def versionObj = new Version(major: 4, minor: 1, revision: 0)
+def versionObj = new Version(major: 4, minor: 2, revision: 0)
 project.version = "${versionObj}"
 
 processResources {

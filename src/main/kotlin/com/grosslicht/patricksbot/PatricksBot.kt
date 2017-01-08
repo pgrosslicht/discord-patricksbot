@@ -25,5 +25,6 @@ fun main(args: Array<String>) {
     cmdHandler.registerCommand(RmCommand())
     cmdHandler.registerCommand(StatusCommand())
     cmdHandler.registerCommand(Insulter())
+    cmdHandler.registerCommand(WordCloudCommand())
     cmdHandler.registerCommand(HelpCommand(cmdHandler))
 }

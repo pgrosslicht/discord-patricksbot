@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
     val token = System.getenv("DISCORD_API_TOKEN")
     builder.setToken(token)
     val jda = builder.buildBlocking()
-    //jda.addEventListener(Logging())
+    jda.addEventListener(Logging())
     jda.addEventListener(OfflineWarner())
     jda.addEventListener(Welcomer())
     jda.addEventListener(CleverBotListener())

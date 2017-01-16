@@ -49,7 +49,7 @@ class WordCloudCommand : CommandExecutor {
         channel.sendFile(byteArrayOutputStream.toByteArray(), "wordcloud-${channel.id}-${ZonedDateTime.now().toEpochSecond()}.png", null).queue()
     }
 
-    @Command(aliases = arrayOf(".wordcloudy"), usage = ".wordcloud", description = "Creates a word cloud of the current channel", async = true)
+    @Command(aliases = arrayOf(".wordcloud"), usage = ".wordcloud", description = "Creates a word cloud of the current channel", async = true)
     fun wordCloud(message: Message) {
         generateWordCloud(message.channel)
     }

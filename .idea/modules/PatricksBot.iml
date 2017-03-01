@@ -7,7 +7,7 @@
           <KotlinCompilerInfo>
             <option name="compilerSettings">
               <CompilerSettings>
-                <option name="additionalArguments" value="-P plugin:org.jetbrains.kotlin.kapt:output=/Users/patrickgrosslicht/Dropbox/Development/Discord/Java/PatricksBot/build/tmp/kapt/main/wrappers/annotations.main.txt,plugin:org.jetbrains.kotlin.kapt:stubs=/Users/patrickgrosslicht/Dropbox/Development/Discord/Java/PatricksBot/build/tmp/kapt/main/classFileStubs,plugin:org.jetbrains.kotlin.kapt:inherited=true,plugin:org.jetbrains.kotlin.kapt:output=/Users/patrickgrosslicht/Dropbox/Development/Discord/Java/PatricksBot/build/tmp/kapt/main/wrappers/annotations.main.txt,plugin:org.jetbrains.kotlin.kapt:stubs=/Users/patrickgrosslicht/Dropbox/Development/Discord/Java/PatricksBot/build/tmp/kapt/main/classFileStubs,plugin:org.jetbrains.kotlin.kapt:inherited=true,plugin:org.jetbrains.kotlin.kapt:output=/Users/patrickgrosslicht/Dropbox/Development/Discord/Java/PatricksBot/build/tmp/kapt/main/wrappers/annotations.main.txt,plugin:org.jetbrains.kotlin.kapt:stubs=/Users/patrickgrosslicht/Dropbox/Development/Discord/Java/PatricksBot/build/tmp/kapt/main/classFileStubs,plugin:org.jetbrains.kotlin.kapt:inherited=true" />
+                <option name="additionalArguments" value="-Xplugin /Users/patrickgrosslicht/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-annotation-processing/1.1.0/a53b076cf2e66c838189ddd69a0eccdaa05e43a5/kotlin-annotation-processing-1.1.0.jar" />
               </CompilerSettings>
             </option>
             <option name="k2jsCompilerArguments">

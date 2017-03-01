@@ -40,7 +40,7 @@ class WordCloudCommand : CommandExecutor {
         val wordCloud = WordCloud(dimension, CollisionMode.RECTANGLE)
         wordCloud.setPadding(0)
         wordCloud.setFontScalar(LinearFontScalar(40, 120))
-        wordCloud.setKumoFont(KumoFont(WordCloudCommand.javaClass.getResourceAsStream("/fonts/candarab.ttf")))
+        wordCloud.setKumoFont(KumoFont(WordCloudCommand::class.java.getResourceAsStream("/fonts/candarab.ttf")))
         wordCloud.setColorPalette(ColorPalette(Color(0xD5CFFA), Color(0xBBB1FA), Color(0x9A8CF5),
                 Color(0x806EF5)))
         wordCloud.build(wordFrequencies)

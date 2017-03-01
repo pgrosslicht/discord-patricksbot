@@ -5,7 +5,7 @@ import com.grosslicht.patricksbot.command.Command
 import com.grosslicht.patricksbot.command.CommandExecutor
 import mu.KLogging
 import net.dv8tion.jda.core.JDA
-import net.dv8tion.jda.core.MessageHistory
+import net.dv8tion.jda.core.entities.MessageHistory
 import java.util.*
 import java.util.concurrent.TimeUnit
 

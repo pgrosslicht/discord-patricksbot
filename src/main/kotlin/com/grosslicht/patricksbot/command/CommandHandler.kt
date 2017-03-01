@@ -23,7 +23,7 @@ abstract class CommandHandler {
     fun registerCommand(executor: CommandExecutor) {
         for (method in executor.javaClass.methods) {
             val annotation = method.getAnnotation(Command::class.java) ?: continue
-            if (annotation.aliases.size === 0) {
+            if (annotation.aliases.size == 0) {
                 throw IllegalArgumentException("Aliases array cannot be empty!")
             }
             val command = SimpleCommand(annotation, method, executor)

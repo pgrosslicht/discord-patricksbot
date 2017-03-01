@@ -32,11 +32,11 @@ class RmCommand : CommandExecutor {
             logger.error { "toDelete is less than 1!" }
             return
         }
-        message.deleteMessage().queue {
+        message.delete().queue {
             channel.history.retrievePast(toDelete.toInt()).queue { msgs: MutableList<Message> ->
                 val filteredMessages = msgs.asSequence().filter(filter)
                 when {
-                    filteredMessages.count() < 2 -> filteredMessages.firstOrNull()?.deleteMessage()?.queue()
+                    filteredMessages.count() < 2 -> filteredMessages.firstOrNull()?.delete()?.queue()
                     else -> channel.deleteMessages(filteredMessages.toList()).queue()
                 }
             }

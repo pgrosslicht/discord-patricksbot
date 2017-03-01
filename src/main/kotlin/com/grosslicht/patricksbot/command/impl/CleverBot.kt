@@ -3,7 +3,6 @@ package com.grosslicht.patricksbot.command.impl
 import com.google.code.chatterbotapi.ChatterBotFactory
 import com.google.code.chatterbotapi.ChatterBotSession
 import com.google.code.chatterbotapi.ChatterBotType
-import mu.KLogging
 import net.dv8tion.jda.core.entities.MessageChannel
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.concurrent.thread
@@ -12,7 +11,7 @@ import kotlin.concurrent.thread
  * Created by patrickgrosslicht on 08/01/17.
  */
 class CleverBot {
-    val chatBotSession: ChatterBotSession = ChatterBotFactory().create(ChatterBotType.CLEVERBOT).createSession()
+    val chatBotSession: ChatterBotSession = ChatterBotFactory().create(ChatterBotType.CLEVERBOT, System.getenv("CLEVERBOT_API_KEY")).createSession()
 
     fun ask(question: String, channel: MessageChannel) {
         thread {

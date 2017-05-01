@@ -24,7 +24,8 @@ class OfflineWarner : ListenerAdapter() {
                                                 "220006633365831680" to "103255776218345472", //{U}
                                                 "196059744991969280" to "103255776218345472", //Nora
                                                 "197553759151194112" to "103267161757204480", //Pancake
-                                                "265702081267105793" to "103255776218345472" //MtG Cards
+                                                "265702081267105793" to "103255776218345472", //MtG Cards
+                                                "297501630847385601" to "103255776218345472" //DJ Pon3
             ))
     override fun onUserOnlineStatusUpdate(event: UserOnlineStatusUpdateEvent) {
         if (event.previousOnlineStatus == OnlineStatus.ONLINE && event.user.isBot) {

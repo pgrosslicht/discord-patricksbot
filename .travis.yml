@@ -25,3 +25,6 @@ before_script:
 script:
   - gradle build assembleDist dockerBuildImage tagAsLatest
   - docker push $CONTAINER_NAME
+
+notifications:
+  webhooks: http://travis-discord.fm-96.at/

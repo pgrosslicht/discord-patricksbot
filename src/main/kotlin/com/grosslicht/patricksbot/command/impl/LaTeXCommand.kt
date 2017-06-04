@@ -29,7 +29,7 @@ class LaTeXCommand : CommandExecutor {
     fun render(channel: MessageChannel, code: String) {
         "/png".httpPost(listOf("q" to code)).response { _, _, result ->
             result.fold({ d ->
-                channel.sendFile(d, "latex.png", null)
+                channel.sendFile(d, "latex.png", null).queue()
             }, { err ->
                 channel.sendMessage("Error while rendering LaTeX")
                 logger.error { err }

@@ -17,9 +17,11 @@ env:
     - secure: ba0cpb3nki4AC3Wiq+sjjo+u1NihuXjD/BvMxSPitQRRW5iRs3LtoGQTb/jgFi4xsom/MDIrtd8WRyZMZVVWxH1Wa2pFpz4l1NenG8OLWk6x0pkkzLNEOzj228DZ1QzCfsR9P6yqy+E+c/fHIFwvIom/5482pNzlG08d4aJYEBa4zL9SgC7qg7WL5jRA8X75QsrKScSeaRHfyyMt+5Lj+efWJWrNym3k1IfIDeySFieL+KlCqJRO1lZVP/3a23gWq9O7k+y8rDgeKwaUj7fjNbv5cdYIbz8SAd3jyXf+5CnG5eHHAYHoi9QfnuI16Hyc1pcrM6WpWfRY3oog0f42mcw+nV8L7Kiw8ofn18uXutjQNmmLffo1anzrLKLr++Ujh1RYKN4GaJsZvBV9U76Bu5ykcAyJhVpICbSEWuT139sSjupe0JmaKgr7RMYY/hKsybZFSugdSnMyTXKge4jP9qAxfjj6xb5xeHWAraH1AnJY6oXshpsFO0HjKyWuHCGlCy+U+ykvt8qs3U3TDeJRwQjWY5N9eixRVkC+1jDxQ9KiK4xsy1u/LrmFwKwnrCqGZIGLnbIeAWGlghjTBonDwUsR7LJW0x0S/5asXqKxXyw5TOyxlmpIGIViGDCSodqCgVaXZVOSOQvgppb3YOuMIPl9q2kC5VXuPNt8Hlzhs08=
     - CONTAINER_NAME="pdgwien/discord-patricksbot"
 
+install: true
+
 before_script:
   - docker login -u="pdgwien" -p="$DOCKER_PASSWORD"
 
 script:
-  - gradle --no-daemon build assembleDist dockerBuildImage tagAsLatest
+  - gradle build assembleDist dockerBuildImage tagAsLatest
   - docker push $CONTAINER_NAME

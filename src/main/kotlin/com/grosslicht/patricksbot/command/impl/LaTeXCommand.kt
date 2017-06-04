@@ -31,7 +31,7 @@ class LaTeXCommand : CommandExecutor {
             result.fold({ d ->
                 channel.sendFile(d, "latex.png", null).queue()
             }, { err ->
-                channel.sendMessage("Error while rendering LaTeX")
+                channel.sendMessage("Error while rendering LaTeX").queue()
                 logger.error { err }
             })
         }

@@ -93,7 +93,7 @@ idea {
     }
 }
 
-def versionObj = new Version(major: 4, minor: 3, revision: 1)
+def versionObj = new Version(major: 4, minor: 4, revision: 0)
 project.version = "${versionObj}"
 
 processResources {
@@ -112,7 +112,7 @@ processResources {
     }
 }
 
-def dockerImage = System.getenv('CI_REGISTRY_IMAGE')
+def dockerImage = System.getenv('CONTAINER_NAME')
 
 task dockerCopyDistResources(type: Copy, dependsOn: distTar) {
     description = "Copies the distribution resources to a temporary directory for image creation."
@@ -148,7 +148,7 @@ class Version {
     int major, minor, revision
 
     String getBuild() {
-        System.getenv('CI_BUILD_REF') ?: 'dev'
+        System.getenv('TRAVIS_BUILD_NUMBER') ?: 'dev'
     }
 
     String toString() {

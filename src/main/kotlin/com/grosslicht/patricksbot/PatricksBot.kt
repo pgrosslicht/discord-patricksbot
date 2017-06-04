@@ -22,6 +22,7 @@ fun main(args: Array<String>) {
     cmdHandler.registerCommand(InfoCommand())
     cmdHandler.registerCommand(PingCommand())
     cmdHandler.registerCommand(CodeCommand())
+    cmdHandler.registerCommand(LaTeXCommand())
     cmdHandler.registerCommand(RmCommand())
     cmdHandler.registerCommand(StatusCommand())
     cmdHandler.registerCommand(Insulter())

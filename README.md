@@ -5,3 +5,5 @@ Set the following environment variables to configure the bot:
 * `CLEVERBOT_API_USER` - API user for cleverbot.io API
 * `CLEVERBOT_API_KEY` - API key for cleverbot.io API
 * `CLEVERBOT_CHANNEL` - name of channel where to bot responds with cleverbot messages
+* `REPL_IT_SECRET_TOKEN` - token for repl.it API
+* `MATHOID_URL` - URL for mathoid API server

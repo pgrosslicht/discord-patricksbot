@@ -25,7 +25,7 @@ class CodeCommand : CommandExecutor {
     class Token {
         val timeCreated = Instant.now().toEpochMilli()
         var mac: String
-        val secretToken = "76r5vn7gvp76xtj1"
+        val secretToken: String = System.getenv("REPL_IT_SECRET_TOKEN")
 
         init {
             val hmac = Mac.getInstance("HmacSHA256")

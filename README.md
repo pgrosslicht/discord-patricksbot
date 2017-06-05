@@ -1,3 +1,6 @@
+# PatricksBot [![Build Status](https://travis-ci.org/pgrosslicht/discord-patricksbot.svg?branch=master)](https://travis-ci.org/pgrosslicht/discord-patricksbot)
+
+
 Set the following environment variables to configure the bot:
 
 * `DISCORD_API_TOKEN` - API token of the bot to use

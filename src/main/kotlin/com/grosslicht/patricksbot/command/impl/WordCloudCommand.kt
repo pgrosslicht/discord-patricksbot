@@ -30,7 +30,7 @@ import java.time.ZonedDateTime
 class WordCloudCommand : CommandExecutor {
     companion object : KLogging()
 
-    fun generateWordCloud(channel: MessageChannel) {
+    /*fun generateWordCloud(channel: MessageChannel) {
         val words: List<String> = data.select(MessageEntity.ID, MessageEntity.CONTENT).from(MessageEntity::class).where(MessageEntity.CHANNEL_ID.eq(channel.id)).get().map { m -> m.content }
         val frequencyAnalyzer = FrequencyAnalyzer()
         frequencyAnalyzer.setWordFrequenciesToReturn(200)
@@ -52,5 +52,5 @@ class WordCloudCommand : CommandExecutor {
     @Command(aliases = arrayOf(".wordcloud"), usage = ".wordcloud", description = "Creates a word cloud of the current channel", async = true)
     fun wordCloud(message: Message) {
         generateWordCloud(message.channel)
-    }
+    }*/
 }

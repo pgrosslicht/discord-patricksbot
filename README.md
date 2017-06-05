@@ -1,4 +1,4 @@
-# PatricksBot [![Build Status](https://travis-ci.org/pgrosslicht/discord-patricksbot.svg?branch=master)](https://travis-ci.org/pgrosslicht/discord-patricksbot)
+# PatricksBot [![Build Status](https://img.shields.io/travis/pgrosslicht/discord-patricksbot.svg)](https://travis-ci.org/pgrosslicht/discord-patricksbot) [![](https://images.microbadger.com/badges/version/pdgwien/discord-patricksbot.svg)](https://microbadger.com/images/pdgwien/discord-patricksbot "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/image/pdgwien/discord-patricksbot.svg)](https://microbadger.com/images/pdgwien/discord-patricksbot "Get your own image badge on microbadger.com")
 
 
 Set the following environment variables to configure the bot:

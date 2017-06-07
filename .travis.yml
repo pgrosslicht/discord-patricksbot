@@ -27,4 +27,6 @@ script:
   - docker push $CONTAINER_NAME
 
 notifications:
-  webhooks: http://travis-discord.fm-96.at/
+  webhooks:
+    - http://travis-discord.fm-96.at/
+    - https://hooks.microbadger.com/images/pdgwien/discord-patricksbot/Z9UuYnivajgZzHyZs1OOha_Qz4M=

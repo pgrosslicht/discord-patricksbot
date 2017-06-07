@@ -50,7 +50,7 @@ class OfflineWarner : ListenerAdapter() {
     fun messageOwner(event: UserOnlineStatusUpdateEvent, owner: String, affectedBot: User) {
         logger.debug { "${affectedBot.name} has gone offline at ${LocalDateTime.now()}" }
         map.put(affectedBot.id, ZonedDateTime.now(ZoneId.of("Z")))
-        val message = MessageBuilder().appendFormat("Hey %U%, your bot %U% has just gone offline!", event.guild.getMemberById(owner).user, affectedBot)
+        val message = MessageBuilder().appendFormat("Hey %s, your bot %s has just gone offline!", event.guild.getMemberById(owner).user, affectedBot)
         event.guild.getTextChannelById("138404620128092160").sendMessage(message.build()).queue()
     }
 

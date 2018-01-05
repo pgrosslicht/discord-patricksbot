@@ -4,13 +4,6 @@ import com.grosslicht.patricksbot.DataSource.data
 import com.grosslicht.patricksbot.command.Command
 import com.grosslicht.patricksbot.command.CommandExecutor
 import com.grosslicht.patricksbot.models.MessageEntity
-import com.kennycason.kumo.CollisionMode
-import com.kennycason.kumo.WordCloud
-import com.kennycason.kumo.WordFrequency
-import com.kennycason.kumo.font.KumoFont
-import com.kennycason.kumo.font.scale.LinearFontScalar
-import com.kennycason.kumo.nlp.FrequencyAnalyzer
-import com.kennycason.kumo.palette.ColorPalette
 import mu.KLogging
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.MessageChannel

@@ -38,10 +38,10 @@ class LaTeXCommand : CommandExecutor {
     }
     @Command(aliases = arrayOf(".latex"), description = "Renders LaTeX", async = true)
     fun handleCommand(message: Message) {
-        if (message.content.startsWith(".latex ```")) {
-            val lang = getLanguage(message.content)
+        if (message.contentDisplay.startsWith(".latex ```")) {
+            val lang = getLanguage(message.contentDisplay)
             if (lang == "latex" || lang == "tex") {
-                render(message.channel, message.content.substring(message.content.indexOf("```"), message.content.lastIndexOf("```") + 3).replace(Regex("(^```(\\w+)?)|(```$)"), "").trim())
+                render(message.channel, message.contentDisplay.substring(message.contentDisplay.indexOf("```"), message.contentDisplay.lastIndexOf("```") + 3).replace(Regex("(^```(\\w+)?)|(```$)"), "").trim())
             }
         }
     }

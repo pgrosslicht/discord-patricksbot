@@ -5,7 +5,6 @@ import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.entities.*
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
 import net.dv8tion.jda.core.hooks.EventListener
-import net.dv8tion.jda.core.utils.SimpleLog
 import java.lang.reflect.InvocationTargetException
 
 /**
@@ -86,9 +85,9 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
         try {
             reply = method.invoke(command.executor, *parameters)
         } catch (e: IllegalAccessException) {
-            SimpleLog.getLog(javaClass.name).log(e)
+            logger.error { e }
         } catch (e: InvocationTargetException) {
-            SimpleLog.getLog(javaClass.name).log(e)
+            logger.error { e }
         }
 
         if (reply != null) {

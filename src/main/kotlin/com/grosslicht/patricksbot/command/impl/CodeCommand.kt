@@ -9,9 +9,9 @@ import mu.KLogging
 import net.dv8tion.jda.core.MessageBuilder
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.MessageChannel
-import org.apache.commons.codec.binary.Base64
 import java.net.URLEncoder
 import java.time.Instant
+import java.util.*
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -30,7 +30,7 @@ class CodeCommand : CommandExecutor {
         init {
             val hmac = Mac.getInstance("HmacSHA256")
             hmac.init(SecretKeySpec(secretToken.toByteArray(), "HmacSHA256"))
-            mac = Base64.encodeBase64String(hmac.doFinal(timeCreated.toString().toByteArray()))
+            mac = Base64.getEncoder().encodeToString(hmac.doFinal(timeCreated.toString().toByteArray()))
         }
     }
 
@@ -92,14 +92,14 @@ class CodeCommand : CommandExecutor {
 
     @Command(aliases = arrayOf(".code"), description = "Compiles code", async = true)
     fun handleCommand(message: Message) {
-        if (message.content == ".code supported") {
+        if (message.contentDisplay == ".code supported") {
             message.channel.sendMessage(supportedLanguages.joinToString(", ")).queue()
-        } else if (message.content.startsWith(".code ```")) {
-            val lang = getLanguage(message.content)
+        } else if (message.contentDisplay.startsWith(".code ```")) {
+            val lang = getLanguage(message.contentDisplay)
             if (languageAliases[lang] == null) {
                 message.channel.sendMessage("This language is not supported, type `.code supported` to see the supported languages.").queue()
             } else {
-                executeCode(message.channel, languageAliases[lang]!!, message.content.substring(message.content.indexOf("```"), message.content.lastIndexOf("```") + 3).replace(Regex("(^```(\\w+)?)|(```$)"), "").trim())
+                executeCode(message.channel, languageAliases[lang]!!, message.contentDisplay.substring(message.contentDisplay.indexOf("```"), message.contentDisplay.lastIndexOf("```") + 3).replace(Regex("(^```(\\w+)?)|(```$)"), "").trim())
             }
         } else {
             message.channel.sendMessage("Usage: `.code ```language codeToExecute```").queue()

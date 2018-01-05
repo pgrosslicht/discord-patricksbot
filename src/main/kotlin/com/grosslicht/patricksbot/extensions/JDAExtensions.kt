@@ -113,7 +113,7 @@ fun net.dv8tion.jda.core.entities.Message.create(): Message {
     val msg = MessageEntity()
     msg.setUser(user)
     msg.setChannel(channel)
-    msg.content = this.content
+    msg.content = this.contentDisplay
     msg.setId(this.id)
     msg.mentionsEverybody = this.mentionsEveryone()
     msg.setTime(this.creationTime)
@@ -136,7 +136,7 @@ fun net.dv8tion.jda.core.entities.Message.upsert(): Message {
     val msg = MessageEntity()
     msg.setUser(user)
     msg.setChannel(channel)
-    msg.content = this.content
+    msg.content = this.contentDisplay
     msg.setId(this.id)
     msg.mentionsEverybody = this.mentionsEveryone()
     msg.setTime(this.creationTime)

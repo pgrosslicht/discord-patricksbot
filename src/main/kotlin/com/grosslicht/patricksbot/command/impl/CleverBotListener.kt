@@ -11,7 +11,7 @@ class CleverBotListener : ListenerAdapter() {
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.channel.name.toLowerCase() == System.getenv("CLEVERBOT_CHANNEL")?.toLowerCase() ?: "bottalk") {
             if (event.message.author != event.jda.selfUser) {
-                cleverBot.ask(event.message.content, event.channel)
+                cleverBot.ask(event.message.contentDisplay, event.channel)
             }
         }
     }

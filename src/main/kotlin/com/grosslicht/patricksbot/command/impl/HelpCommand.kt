@@ -31,7 +31,7 @@ class HelpCommand(private val commandHandler: CommandHandler) : CommandExecutor 
 
         table.context.width = 85
         builder.appendCodeBlock(table.render(), "xml")
-        return builder.build().contentDisplay
+        return builder.build().contentRaw
     }
 
 }

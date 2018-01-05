@@ -30,7 +30,7 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
         if (event.author === jda.selfUser) {
             return
         }
-        var splitMessage = event.message.rawContent.split(" ")
+        var splitMessage = event.message.contentRaw.split(" ")
         val commandString = splitMessage[0]
         var command = commands[commandString.toLowerCase()]
         if (command == null) {

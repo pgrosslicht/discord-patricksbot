@@ -23,7 +23,7 @@ class Logging : ListenerAdapter() {
         if (event.channelType == ChannelType.TEXT) {
             event.message.create()
         }
-        logger.debug { "Received message #${event.message.id} '${event.message.content}' from ${event.author.name}" }
+        logger.debug { "Received message #${event.message.id} '${event.message.contentDisplay}' from ${event.author.name}" }
     }
 
     override fun onMessageDelete(event: MessageDeleteEvent) {
@@ -50,12 +50,12 @@ class Logging : ListenerAdapter() {
                     rev.setContent(message.content)
                     insert(rev)
                     message.isEdited = true
-                    message.content = event.message.content
+                    message.content = event.message.contentDisplay
                     update(message)
                 }
             }
         }
-        logger.debug { "Message updated: '${event.message.content}' by ${event.author.name}" }
+        logger.debug { "Message updated: '${event.message.contentDisplay}' by ${event.author.name}" }
     }
 }
 

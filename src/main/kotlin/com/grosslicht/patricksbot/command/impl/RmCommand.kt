@@ -19,7 +19,7 @@ class RmCommand : CommandExecutor {
 
     @Command(aliases = arrayOf(".rmregex"), showInHelpPage = false, onlyOwner = true)
     fun removeRegex(cmd: String, regex: String, toDelete: String?, message: Message) {
-        delete(toDelete?.toLong() ?: 1, { m : Message -> m.content.matches(regex.toRegex()) }, message.textChannel, message)
+        delete(toDelete?.toLong() ?: 1, { m : Message -> m.contentDisplay.matches(regex.toRegex()) }, message.textChannel, message)
     }
 
     @Command(aliases = arrayOf(".rmuser"), showInHelpPage = false, onlyOwner = true)

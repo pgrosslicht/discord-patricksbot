@@ -1,11 +1,14 @@
 package com.grosslicht.patricksbot.command
 
 import mu.KLogging
+import net.dv8tion.jda.client.entities.Group
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.entities.*
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
-import net.dv8tion.jda.core.hooks.EventListener
 import java.lang.reflect.InvocationTargetException
+import net.dv8tion.jda.core.hooks.ListenerAdapter
+
+
 
 /**
  * Created by patrickgrosslicht on 03/11/16.
@@ -14,8 +17,8 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
     val OWNER_ID = "135726717363945472"
     companion object: KLogging()
     init {
-        jda.addEventListener(EventListener { event ->
-            if (event is MessageReceivedEvent) {
+        jda.addEventListener(object : ListenerAdapter() {
+            override fun onMessageReceived(event: MessageReceivedEvent) {
                 handleMessageCreate(event)
             }
         })
@@ -88,6 +91,7 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
             logger.error { e }
         } catch (e: InvocationTargetException) {
             logger.error { e }
+            e.printStackTrace()
         }
 
         if (reply != null) {
@@ -128,10 +132,12 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
                 MessageChannel::class.java -> parameters[i] = event.channel
                 Message::class.java -> parameters[i] = event.message
                 User::class.java -> parameters[i] = event.author
+                Member::class.java -> parameters[i] = event.member
                 TextChannel::class.java -> parameters[i] = event.textChannel
                 PrivateChannel::class.java -> parameters[i] = event.privateChannel
                 MessageChannel::class.java -> parameters[i] = event.channel
                 Channel::class.java -> parameters[i] = event.textChannel
+                Group::class.java -> parameters[i] = event.group
                 Guild::class.java -> parameters[i] = event.guild
                 Int::class.java, Integer.TYPE -> parameters[i] = event.responseNumber
                 Array<Any>::class.java -> parameters[i] = getObjectsFromString(event.jda, args)
@@ -169,8 +175,8 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
      */
     private fun getObjectFromString(jda: JDA, arg: String): Any {
         try {
-            // test int
-            return Integer.valueOf(arg)
+            // test long
+            return arg.toLong()
         } catch (e: NumberFormatException) {
         }
 

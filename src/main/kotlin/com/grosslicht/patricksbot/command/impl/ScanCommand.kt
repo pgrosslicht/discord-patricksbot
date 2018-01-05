@@ -6,6 +6,7 @@ import com.grosslicht.patricksbot.command.CommandExecutor
 import mu.KLogging
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.entities.MessageHistory
+import net.dv8tion.jda.core.entities.TextChannel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -20,16 +21,16 @@ class ScanCommand : CommandExecutor {
     var scannerThreads: MutableMap<String, Thread> = HashMap()
 
     @Command(aliases = arrayOf(".scan"), showInHelpPage = false, onlyOwner = true, async = true)
-    fun scan(cmd: String, channelId: String, jda: JDA) {
+    fun scan(channel: TextChannel, jda: JDA) {
         i = 0
-        logger.debug { "Scan started for $channelId" }
+        logger.debug { "Scan started for ${channel.id}" }
         val scanner = Scanner()
         val scannerThread = Thread(scanner)
         scannerThread.start()
-        scanners.put(channelId, scanner)
-        scannerThreads.put(channelId, scannerThread)
+        scanners.put(channel.id, scanner)
+        scannerThreads.put(channel.id, scannerThread)
         stopwatch = Stopwatch.createStarted()
-        walkChannelHistory(channelId, jda.getTextChannelById(channelId).history)
+        walkChannelHistory(channel.id, channel.history)
     }
 
     fun walkChannelHistory(channelId: String, history: MessageHistory) {

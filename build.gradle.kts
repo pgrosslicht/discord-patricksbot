@@ -63,6 +63,12 @@ tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
 }
 
+tasks.named<ProcessResources>("processResources") {
+    filesMatching("**/build.properties") {
+        expand(project.properties)
+    }
+}
+
 application {
     mainClassName = "com.grosslicht.patricksbot.PatricksBotKt"
 }

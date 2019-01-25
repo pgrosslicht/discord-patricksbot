@@ -23,7 +23,7 @@ before_script:
   - docker login -u="pdgwien" -p="$DOCKER_PASSWORD"
 
 script:
-  - gradle build assembleDist dockerBuildImage tagAsLatest
+  - ./gradlew build dockerBuildImage
   - docker push $CONTAINER_NAME
 
 notifications:

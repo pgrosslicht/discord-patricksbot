@@ -4,6 +4,13 @@ import com.grosslicht.patricksbot.DataSource.data
 import com.grosslicht.patricksbot.command.Command
 import com.grosslicht.patricksbot.command.CommandExecutor
 import com.grosslicht.patricksbot.models.MessageEntity
+import com.kennycason.kumo.CollisionMode
+import com.kennycason.kumo.WordCloud
+import com.kennycason.kumo.WordFrequency
+import com.kennycason.kumo.font.KumoFont
+import com.kennycason.kumo.font.scale.LinearFontScalar
+import com.kennycason.kumo.nlp.FrequencyAnalyzer
+import com.kennycason.kumo.palette.ColorPalette
 import mu.KLogging
 import net.dv8tion.jda.core.entities.Message
 import net.dv8tion.jda.core.entities.MessageChannel
@@ -13,21 +20,17 @@ import java.io.ByteArrayOutputStream
 import java.time.ZonedDateTime
 
 
-
-
-
-
-
 class WordCloudCommand : CommandExecutor {
     companion object : KLogging()
 
-    /*fun generateWordCloud(channel: MessageChannel) {
-        val words: List<String> = data.select(MessageEntity.ID, MessageEntity.CONTENT).from(MessageEntity::class).where(MessageEntity.CHANNEL_ID.eq(channel.id)).get().map { m -> m.content }
+    private fun generateWordCloud(channel: MessageChannel) {
+        val words: List<String> = data.select(MessageEntity.CONTENT).from(MessageEntity::class).where(MessageEntity.CHANNEL_ID.eq(channel.id))
+                .get().mapNotNull { m -> m.get<String>(0) }
         val frequencyAnalyzer = FrequencyAnalyzer()
         frequencyAnalyzer.setWordFrequenciesToReturn(200)
         val wordFrequencies: List<WordFrequency> = frequencyAnalyzer.load(words)
         logger.debug { wordFrequencies }
-        val dimension: Dimension = Dimension(1024, 1024)
+        val dimension = Dimension(1024, 1024)
         val wordCloud = WordCloud(dimension, CollisionMode.RECTANGLE)
         wordCloud.setPadding(0)
         wordCloud.setFontScalar(LinearFontScalar(40, 120))
@@ -40,8 +43,8 @@ class WordCloudCommand : CommandExecutor {
         channel.sendFile(byteArrayOutputStream.toByteArray(), "wordcloud-${channel.id}-${ZonedDateTime.now().toEpochSecond()}.png", null).queue()
     }
 
-    @Command(aliases = arrayOf(".wordcloud"), usage = ".wordcloud", description = "Creates a word cloud of the current channel", async = true)
+    @Command(aliases = [".wordcloud"], usage = ".wordcloud", description = "Creates a word cloud of the current channel", async = true)
     fun wordCloud(message: Message) {
         generateWordCloud(message.channel)
-    }*/
+    }
 }

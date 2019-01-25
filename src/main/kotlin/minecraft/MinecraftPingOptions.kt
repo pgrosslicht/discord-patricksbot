@@ -1,7 +1,6 @@
 package com.grosslicht.patricksbot.minecraft
 
 
-
 class MinecraftPingOptions {
 
     private var hostname: String = "play.grosslicht.com"

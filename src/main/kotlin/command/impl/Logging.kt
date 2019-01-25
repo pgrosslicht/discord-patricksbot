@@ -12,10 +12,10 @@ import net.dv8tion.jda.core.events.message.MessageUpdateEvent
 import net.dv8tion.jda.core.hooks.ListenerAdapter
 
 
-
 class Logging : ListenerAdapter() {
     companion object : KLogging()
-    val data = DataSource.data
+
+    private val data = DataSource.data
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
         if (event.channelType == ChannelType.TEXT) {
@@ -27,7 +27,7 @@ class Logging : ListenerAdapter() {
     override fun onMessageDelete(event: MessageDeleteEvent) {
         if (event.channelType == ChannelType.TEXT) {
             data.invoke {
-                var message: Message? = findByKey(Message::class, event.messageId)
+                val message: Message? = findByKey(Message::class, event.messageId)
                 if (message != null) {
                     message.isDeleted = true
                     update(message)
@@ -40,7 +40,7 @@ class Logging : ListenerAdapter() {
     override fun onMessageUpdate(event: MessageUpdateEvent) {
         if (event.channelType == ChannelType.TEXT) {
             data.invoke {
-                var message: Message? = findByKey(Message::class, event.message.id)
+                val message: Message? = findByKey(Message::class, event.message.id)
                 if (message != null) {
                     val rev = MessageRevisionEntity()
                     rev.setMessage(message)

@@ -7,15 +7,18 @@ import java.time.OffsetDateTime
 
 @Entity
 interface Message : Persistable {
-    @get:Key @get:Column(length = 20)
+    @get:Key
+    @get:Column(length = 20)
     val id: String
 
     val time: OffsetDateTime
 
-    @get:ManyToOne @get:Column(length = 20)
+    @get:ManyToOne
+    @get:Column(length = 20)
     val channel: Channel
 
-    @get:ManyToOne @get:Column(length = 20)
+    @get:ManyToOne
+    @get:Column(length = 20)
     val user: User
 
     @get:Column(length = 2000)
@@ -24,7 +27,8 @@ interface Message : Persistable {
     @get:OneToMany
     val revisions: Result<MessageRevision>
 
-    @get:OneToMany @get:Column(length = 20)
+    @get:OneToMany
+    @get:Column(length = 20)
     val attachments: MutableSet<MessageAttachment>
 
     var isDeleted: Boolean

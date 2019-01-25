@@ -12,26 +12,29 @@ import java.util.concurrent.TimeUnit
 
 
 class ScanCommand : CommandExecutor {
-    companion object: KLogging()
-    var i = 0
-    var stopwatch = Stopwatch.createUnstarted()
-    var scanners: MutableMap<String, Scanner> = HashMap()
-    var scannerThreads: MutableMap<String, Thread> = HashMap()
+    companion object : KLogging()
 
-    @Command(aliases = arrayOf(".scan"), showInHelpPage = false, onlyOwner = true, async = true)
+    private var i = 0
+    private var stopwatch = Stopwatch.createUnstarted()
+    private var scanners: MutableMap<String, Scanner> = HashMap()
+    private var scannerThreads: MutableMap<String, Thread> = HashMap()
+
+    @Command(aliases = [".scan"], showInHelpPage = false, onlyOwner = true, async = true)
     fun scan(channel: TextChannel, jda: JDA) {
         i = 0
         logger.debug { "Scan started for ${channel.id}" }
         val scanner = Scanner()
         val scannerThread = Thread(scanner)
         scannerThread.start()
-        scanners.put(channel.id, scanner)
-        scannerThreads.put(channel.id, scannerThread)
+        scanners[channel.id] = scanner
+        scannerThreads[channel.id] = scannerThread
         stopwatch = Stopwatch.createStarted()
         walkChannelHistory(channel.id, channel.history)
+        channel.iterableHistory
     }
 
-    fun walkChannelHistory(channelId: String, history: MessageHistory) {
+    private fun walkChannelHistory(channelId: String, history: MessageHistory) {
+        //TODO: rewrite with iterableHistory and bulk upserts
         history.retrievePast(100).queue { list ->
             i += list.size
             scanners[channelId]?.addAll(list)

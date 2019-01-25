@@ -8,7 +8,7 @@ import net.dv8tion.jda.core.entities.Message
 
 
 class StatusCommand : CommandExecutor {
-    @Command(aliases = arrayOf(".status"), onlyOwner = true, showInHelpPage = false)
+    @Command(aliases = [".status"], onlyOwner = true, showInHelpPage = false)
     fun onStatusCommand(message: Message, jda: JDA) {
         when {
             message.contentDisplay.contains("invisible") -> jda.presence.status = OnlineStatus.INVISIBLE

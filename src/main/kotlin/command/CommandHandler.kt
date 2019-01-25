@@ -6,12 +6,12 @@ import java.util.*
 
 abstract class CommandHandler {
     val commands: HashMap<String, SimpleCommand> = HashMap()
-    val commandList: MutableList<SimpleCommand> = ArrayList()
+    private val commandList: MutableList<SimpleCommand> = ArrayList()
 
     /**
      * Gets the default command prefix.
      */
-    var defaultPrefix = ""
+    private var defaultPrefix = ""
 
     /**
      * Registers an executor.
@@ -21,13 +21,13 @@ abstract class CommandHandler {
     fun registerCommand(executor: CommandExecutor) {
         for (method in executor.javaClass.methods) {
             val annotation = method.getAnnotation(Command::class.java) ?: continue
-            if (annotation.aliases.size == 0) {
+            if (annotation.aliases.isEmpty()) {
                 throw IllegalArgumentException("Aliases array cannot be empty!")
             }
             val command = SimpleCommand(annotation, method, executor)
             for (alias in annotation.aliases) {
                 // add command to map. It's faster to access it from the map than iterating to the whole list
-                commands.put(defaultPrefix + alias.toLowerCase().replace(" ", ""), command)
+                commands[defaultPrefix + alias.toLowerCase().replace(" ", "")] = command
             }
             // we need a list, too, because a HashMap is not ordered.
             commandList.add(command)
@@ -51,7 +51,7 @@ abstract class CommandHandler {
     /**
      * Class constructor.
 
-     * @param annotation The annotation of the executor's method.
+     * @param commandAnnotation The annotation of the executor's method.
      * *
      * @param method The method which listens to the commands.
      * *
@@ -75,5 +75,6 @@ abstract class CommandHandler {
 
              * @return The executor of the method.
              */
-            val executor: CommandExecutor)
+            val executor: CommandExecutor
+    )
 }

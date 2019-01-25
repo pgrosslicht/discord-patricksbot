@@ -7,7 +7,6 @@ import com.grosslicht.patricksbot.models.Guild
 import com.grosslicht.patricksbot.models.User
 
 
-
 object DBCache {
     val userCache: Cache<String, User> = CacheBuilder.newBuilder()
             .maximumSize(System.getenv("USER_CACHE_SIZE")?.toLong() ?: 500)

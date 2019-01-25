@@ -1,7 +1,6 @@
 package com.grosslicht.patricksbot.minecraft
 
 
-
 class MinecraftPingReply {
 
     /**

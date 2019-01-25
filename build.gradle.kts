@@ -43,8 +43,9 @@ dependencies {
     kapt("io.requery:requery-processor:$requeryVersion")
 
 
+    compile("com.google.code.gson:gson:2.8.5")
     compile("com.github.kittinunf.fuel:fuel:2.0.0")
-    compile("com.github.salomonbrys.kotson:kotson:2.5.0") //TODO: replace with kotlinx.serialization
+    compile("com.github.kittinunf.fuel:fuel-gson:2.0.0")
 
     compile("de.vandermeer:asciitable:0.3.2")
 

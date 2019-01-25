@@ -10,7 +10,6 @@ import net.dv8tion.jda.core.entities.TextChannel
 import java.time.ZonedDateTime
 
 
-
 fun TextChannel.findOrCreate(): Channel {
     return DBCache.channelCache[this.id, {
         val data = DataSource.data
@@ -66,15 +65,16 @@ fun net.dv8tion.jda.core.entities.User.findOrCreate(): User {
 fun net.dv8tion.jda.core.entities.User.findOrCreateMention(msg: Message): Mention {
     val data = DataSource.data
     val user = this.findOrCreate()
-    val result: Offset<Result<MentionEntity>> = data.select(MentionEntity::class) where (Mention::user eq user and (Mention::message eq msg)) limit 1
+    val result: Offset<Result<MentionEntity>> =
+            data.select(MentionEntity::class) where (Mention::user eq user and (Mention::message eq msg)) limit 1
     var newMention: Mention? = result.get().firstOrNull()
-    if (newMention == null) {
+    return if (newMention == null) {
         newMention = MentionEntity()
         newMention.setMessage(msg)
         newMention.setUser(user)
-        return data.insert(newMention)
+        data.insert(newMention)
     } else {
-        return newMention
+        newMention
     }
 }
 
@@ -117,7 +117,11 @@ fun net.dv8tion.jda.core.entities.Message.create(): Message {
     msg.setTime(this.creationTime)
     val res = data.insert(msg)
     if (this.attachments.isNotEmpty()) {
-        this.attachments.forEach { attachments: net.dv8tion.jda.core.entities.Message.Attachment -> attachments.findOrCreate(msg) }
+        this.attachments.forEach { attachments: net.dv8tion.jda.core.entities.Message.Attachment ->
+            attachments.findOrCreate(
+                    msg
+            )
+        }
     }
     if (this.mentionedUsers.isNotEmpty()) {
         this.mentionedUsers.forEach { user: net.dv8tion.jda.core.entities.User ->
@@ -140,7 +144,11 @@ fun net.dv8tion.jda.core.entities.Message.upsert(): Message {
     msg.setTime(this.creationTime)
     val res = data.upsert(msg)
     if (this.attachments.isNotEmpty()) {
-        this.attachments.forEach { attachments: net.dv8tion.jda.core.entities.Message.Attachment -> attachments.findOrCreate(msg) }
+        this.attachments.forEach { attachments: net.dv8tion.jda.core.entities.Message.Attachment ->
+            attachments.findOrCreate(
+                    msg
+            )
+        }
     }
     if (this.mentionedUsers.isNotEmpty()) {
         this.mentionedUsers.forEach { user: net.dv8tion.jda.core.entities.User -> user.findOrCreateMention(msg) }

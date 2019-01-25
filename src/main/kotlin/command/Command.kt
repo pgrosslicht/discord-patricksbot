@@ -1,7 +1,6 @@
 package com.grosslicht.patricksbot.command
 
 
-
 @Retention(AnnotationRetention.RUNTIME)
 annotation class Command(
         /**
@@ -15,7 +14,7 @@ annotation class Command(
         /**
          * Gets the commands the executor should listen to. The first element is the main command.
          */
-        val aliases: Array<String> = arrayOf(""),
+        val aliases: Array<String> = [""],
         /**
          * Gets the description of the command.
          */

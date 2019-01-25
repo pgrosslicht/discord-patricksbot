@@ -5,7 +5,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter
 
 
 class CleverBotListener : ListenerAdapter() {
-    val cleverBot = CleverBot()
+    private val cleverBot = CleverBot()
     override fun onGuildMessageReceived(event: GuildMessageReceivedEvent) {
         if (event.channel.name.toLowerCase() == System.getenv("CLEVERBOT_CHANNEL")?.toLowerCase() ?: "bottalk") {
             if (event.message.author != event.jda.selfUser) {

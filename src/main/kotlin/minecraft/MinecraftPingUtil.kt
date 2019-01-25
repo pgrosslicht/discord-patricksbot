@@ -5,8 +5,6 @@ import java.io.DataOutputStream
 import java.io.IOException
 
 
-
-
 object MinecraftPingUtil {
 
     var PACKET_HANDSHAKE: Byte = 0x00

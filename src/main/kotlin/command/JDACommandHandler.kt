@@ -5,15 +5,15 @@ import net.dv8tion.jda.client.entities.Group
 import net.dv8tion.jda.core.JDA
 import net.dv8tion.jda.core.entities.*
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent
-import java.lang.reflect.InvocationTargetException
 import net.dv8tion.jda.core.hooks.ListenerAdapter
+import java.lang.reflect.InvocationTargetException
 
 
+class JDACommandHandler(jda: JDA) : CommandHandler() {
+    private val ownerId = "135726717363945472"
 
+    companion object : KLogging()
 
-class JDACommandHandler(jda: JDA): CommandHandler() {
-    val OWNER_ID = "135726717363945472"
-    companion object: KLogging()
     init {
         jda.addEventListener(object : ListenerAdapter() {
             override fun onMessageReceived(event: MessageReceivedEvent) {
@@ -21,6 +21,7 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
             }
         })
     }
+
     /**
      * Handles a received message.
 
@@ -57,7 +58,7 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
         if (!event.isFromType(ChannelType.PRIVATE) && !commandAnnotation.channelMessages) {
             return
         }
-        if (commandAnnotation.onlyOwner && event.author.id != OWNER_ID) {
+        if (commandAnnotation.onlyOwner && event.author.id != ownerId) {
             return
         }
         val parameters = getParameters(splitMessage, command, event)
@@ -80,7 +81,11 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
      * *
      * @param parameters The parameters for the method.
      */
-    private fun invokeMethod(command: CommandHandler.SimpleCommand, event: MessageReceivedEvent, parameters: Array<Any?>) {
+    private fun invokeMethod(
+            command: CommandHandler.SimpleCommand,
+            event: MessageReceivedEvent,
+            parameters: Array<Any?>
+    ) {
         val method = command.method
         var reply: Any? = null
         try {
@@ -108,7 +113,11 @@ class JDACommandHandler(jda: JDA): CommandHandler() {
      * *
      * @return The parameters which are used to invoke the executor's method.
      */
-    private fun getParameters(splitMessage: List<String>, command: SimpleCommand, event: MessageReceivedEvent): Array<Any?> {
+    private fun getParameters(
+            splitMessage: List<String>,
+            command: SimpleCommand,
+            event: MessageReceivedEvent
+    ): Array<Any?> {
         val args = splitMessage.subList(1, splitMessage.size)
         val parameterTypes = command.method.parameterTypes
         val parameters = arrayOfNulls<Any>(parameterTypes.size)

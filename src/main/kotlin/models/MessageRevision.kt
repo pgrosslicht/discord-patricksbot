@@ -6,10 +6,12 @@ import java.time.OffsetDateTime
 
 @Entity
 interface MessageRevision : Persistable {
-    @get:Key @get:Generated
+    @get:Key
+    @get:Generated
     val id: Int
 
-    @get:ManyToOne @get:Column(length = 20)
+    @get:ManyToOne
+    @get:Column(length = 20)
     val message: Message
 
     val time: OffsetDateTime

@@ -9,7 +9,8 @@ import kotlin.concurrent.thread
 
 
 class CleverBot {
-    val chatBotSession: ChatterBotSession = ChatterBotFactory().create(ChatterBotType.CLEVERBOT, System.getenv("CLEVERBOT_API_KEY")).createSession()
+    private val chatBotSession: ChatterBotSession =
+            ChatterBotFactory().create(ChatterBotType.CLEVERBOT, System.getenv("CLEVERBOT_API_KEY")).createSession()
 
     fun ask(question: String, channel: MessageChannel) {
         thread {

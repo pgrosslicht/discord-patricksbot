@@ -1,8 +1,7 @@
 package com.grosslicht.patricksbot.command.impl
 
+import com.github.kittinunf.fuel.gson.responseObject
 import com.github.kittinunf.fuel.httpPost
-import com.github.salomonbrys.kotson.fromJson
-import com.google.gson.Gson
 import com.grosslicht.patricksbot.command.Command
 import com.grosslicht.patricksbot.command.CommandExecutor
 import mu.KLogging
@@ -16,14 +15,13 @@ import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
 
-
 class CodeCommand : CommandExecutor {
     companion object : KLogging()
     data class CodeResult(val command: String, val data: String, val error: String)
     class Token {
         val timeCreated = Instant.now().toEpochMilli()
         var mac: String
-        val secretToken: String = System.getenv("REPL_IT_SECRET_TOKEN")
+        private val secretToken: String = System.getenv("REPL_IT_SECRET_TOKEN")
 
         init {
             val hmac = Mac.getInstance("HmacSHA256")
@@ -32,7 +30,8 @@ class CodeCommand : CommandExecutor {
         }
     }
 
-    val languageAliases = hashMapOf(Pair("python3", "python3"),
+    private val languageAliases = hashMapOf(
+            Pair("python3", "python3"),
             Pair("python", "python"),
             Pair("ruby", "ruby"),
             Pair("php", "php"),
@@ -54,20 +53,39 @@ class CodeCommand : CommandExecutor {
             Pair("swift", "swift"),
             Pair("gloang", "go"),
             Pair("go", "go"),
-            Pair("lua", "lua"))
+            Pair("lua", "lua")
+    )
 
-    val supportedLanguages = listOf("C#", "C", "C++", "C++ 11", "F#", "Go", "Java", "Lua", "Nodejs", "PHP", "Python", "Python 3", "Ruby", "Rust", "Swift")
+    private val supportedLanguages = listOf(
+            "C#",
+            "C",
+            "C++",
+            "C++ 11",
+            "F#",
+            "Go",
+            "Java",
+            "Lua",
+            "Nodejs",
+            "PHP",
+            "Python",
+            "Python 3",
+            "Ruby",
+            "Rust",
+            "Swift"
+    )
 
-    fun getLanguage(msg: String) = msg.substring(msg.indexOf("```") + 3, msg.indexOf("\n"))
+    private fun getLanguage(msg: String) = msg.substring(msg.indexOf("```") + 3, msg.indexOf("\n"))
 
-    fun executeCode(channel: MessageChannel, language: String, code: String) {
+    private fun executeCode(channel: MessageChannel, language: String, code: String) {
         val token = Token()
         var output = MessageBuilder()
-        "https://api.repl.it/eval?auth=${token.timeCreated}:${URLEncoder.encode(token.mac, "UTF-8")}&language=$language".httpPost(listOf(Pair("code", code)))
+        "https://api.repl.it/eval?auth=${token.timeCreated}:${URLEncoder.encode(
+                token.mac,
+                "UTF-8"
+        )}&language=$language".httpPost(listOf(Pair("code", code)))
                 .header(mapOf("Content-Type" to "application/x-www-form-urlencoded", "Accept" to "application/json"))
-                .responseString { request, response, result ->
-                    result.fold({ d ->
-                        val results = Gson().fromJson<List<CodeResult>>(d)
+                .responseObject<List<CodeResult>> { _, _, result ->
+                    result.fold({ results ->
                         output = output.append("```$language\n")
                         for ((command, data, error) in results) {
                             if (error != "") {
@@ -88,16 +106,24 @@ class CodeCommand : CommandExecutor {
                 }
     }
 
-    @Command(aliases = arrayOf(".code"), description = "Compiles code", async = true)
+    @Command(aliases = [".code"], description = "Compiles code", async = true)
     fun handleCommand(message: Message) {
         if (message.contentDisplay == ".code supported") {
             message.channel.sendMessage(supportedLanguages.joinToString(", ")).queue()
         } else if (message.contentDisplay.startsWith(".code ```")) {
             val lang = getLanguage(message.contentDisplay)
             if (languageAliases[lang] == null) {
-                message.channel.sendMessage("This language is not supported, type `.code supported` to see the supported languages.").queue()
+                message.channel.sendMessage("This language is not supported, type `.code supported` to see the supported languages.")
+                        .queue()
             } else {
-                executeCode(message.channel, languageAliases[lang]!!, message.contentDisplay.substring(message.contentDisplay.indexOf("```"), message.contentDisplay.lastIndexOf("```") + 3).replace(Regex("(^```(\\w+)?)|(```$)"), "").trim())
+                executeCode(
+                        message.channel,
+                        languageAliases[lang]!!,
+                        message.contentDisplay.substring(
+                                message.contentDisplay.indexOf("```"),
+                                message.contentDisplay.lastIndexOf("```") + 3
+                        ).replace(Regex("(^```(\\w+)?)|(```$)"), "").trim()
+                )
             }
         } else {
             message.channel.sendMessage("Usage: `.code ```language codeToExecute```").queue()

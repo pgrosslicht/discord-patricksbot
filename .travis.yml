@@ -16,9 +16,8 @@ env:
 
 install: true
 
-
 script:
-  - ./gradlew build jib
+  - ./gradlew --no-daemon build jib
 
 notifications:
   webhooks:

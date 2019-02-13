@@ -1,3 +1,4 @@
+dist: xenial
 language: java
 jdk:
   - oraclejdk8
@@ -14,6 +15,7 @@ env:
     - CONTAINER_NAME="pdgwien/discord-patricksbot"
 
 install: true
+
 
 script:
   - ./gradlew build jib

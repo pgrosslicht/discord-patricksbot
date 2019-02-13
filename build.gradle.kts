@@ -9,10 +9,10 @@ plugins {
     kotlin("jvm") version "1.3.11"
     kotlin("kapt") version "1.3.20"
     application
-    id("com.bmuschko.docker-java-application") version "4.3.0"
+    id("com.google.cloud.tools.jib") version "1.0.0"
 }
 
-val versionObj = Version(major = 5, minor = 0, revision = 0)
+val versionObj = Version(major = 5, minor = 0, revision = 1)
 
 group = "com.grosslicht"
 version = "$versionObj"
@@ -76,17 +76,13 @@ application {
 
 val dockerImage = System.getenv("CONTAINER_NAME")
 
-docker {
-    javaApplication {
-        baseImage.set("openjdk:8-jre")
-        maintainer.set("Patrick Grosslicht <patrick@grosslicht.com>")
-        ports.set(listOf())
-        tag.set("$dockerImage:${project.version}")
+jib.to {
+    image = dockerImage
+    tags = setOf("latest", "${project.version}")
+    auth {
+        username = "pdgwien"
+        password = System.getenv("DOCKER_PASSWORD")
     }
-}
-
-tasks.named<DockerBuildImage>("dockerBuildImage") {
-    tags.add("$dockerImage:latest")
 }
 
 data class Version(val major: Int, val minor: Int, val revision: Int) {

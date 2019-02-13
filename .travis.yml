@@ -1,10 +1,6 @@
-sudo: required
-
 language: java
 jdk:
   - oraclejdk8
-services:
-  - docker
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -19,12 +15,8 @@ env:
 
 install: true
 
-before_script:
-  - docker login -u="pdgwien" -p="$DOCKER_PASSWORD"
-
 script:
-  - ./gradlew build dockerBuildImage
-  - docker push $CONTAINER_NAME
+  - ./gradlew build jib
 
 notifications:
   webhooks:
